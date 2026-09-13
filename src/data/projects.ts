@@ -9,6 +9,9 @@ import fieldKnifeCover from '../assets/covers/field-knife.jpg';
 import guardianFigureCover from '../assets/covers/guardian-figure.jpg';
 import checkeredLoungerCover from '../assets/covers/checkered-lounger.jpg';
 import candleAndTealightSetCover from '../assets/covers/candle-and-tealight-set.jpg';
+import castMaterialSamplesCover from '../assets/covers/cast-material-samples.jpg';
+import wovenWillowStudyCover from '../assets/covers/woven-willow-study.jpg';
+import resinAndPigmentFrameCover from '../assets/covers/resin-and-pigment-frame.jpg';
 
 export type Section = 'product' | 'research' | 'graphics' | 'interests';
 
@@ -132,58 +135,33 @@ export const projects: Project[] = [
   {
     slug: 'cast-material-samples',
     section: 'research',
-    title: 'Cast material samples',
-    description: 'A series of experimental casts testing texture and degradation over time.',
-    year: '2023',
+    title: 'Sediments of Vltava',
+    description: 'Sensory pathway',
+    year: '2026',
     color: 'pastel-mint',
     aspect: '4 / 3',
+    cover: castMaterialSamplesCover,
   },
   {
     slug: 'woven-willow-study',
     section: 'research',
-    title: 'Woven willow study',
-    description: 'Hand-woven willow samples studying traditional basket-weaving patterns.',
+    title: 'Virtual craft',
+    description: 'Wickering Skills: Digital vs. Physical Learning.',
     year: '2023',
     color: 'pastel-blush',
-    aspect: '1 / 1',
+    aspect: '4 / 3',
+    cover: wovenWillowStudyCover,
   },
   {
     slug: 'resin-and-pigment-frame',
     section: 'research',
-    title: 'Resin & pigment frame',
-    description: 'A wooden frame cast in pigmented resin, testing translucency and touch.',
-    year: '2024',
+    title: 'Spoj',
+    description: 'Material experimentation with bioplastic',
+    year: '2025',
     color: 'pastel-butter',
     aspect: '3 / 4',
+    cover: resinAndPigmentFrameCover,
   },
-  {
-    slug: 'field-workshop-notes',
-    section: 'research',
-    title: 'Field workshop notes',
-    description: 'Documentation from a collaborative craft workshop exploring shared tools and process.',
-    year: '2024',
-    color: 'pastel-periwinkle',
-    aspect: '4 / 3',
-  },
-  {
-    slug: 'sensory-material-library',
-    section: 'research',
-    title: 'Sensory material library',
-    description: 'An ongoing archive of natural materials catalogued by touch, weight and sound.',
-    year: '2025',
-    color: 'pastel-seafoam',
-    aspect: '3 / 4',
-  },
-  {
-    slug: 'landscape-fieldwork',
-    section: 'research',
-    title: 'Landscape fieldwork',
-    description: 'Site visits studying how rural craft and materials are shaped by landscape.',
-    year: '2025',
-    color: 'pastel-rose',
-    aspect: '3 / 4',
-  },
-
   // ---- Graphics ----
   {
     slug: 'oloveny-dusan',
