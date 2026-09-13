@@ -1,3 +1,6 @@
+import type { ImageMetadata } from 'astro';
+import wickerCradleCover from '../assets/covers/wicker-cradle.jpg';
+
 export type Section = 'product' | 'research' | 'graphics' | 'interests';
 
 export interface Project {
@@ -8,6 +11,7 @@ export interface Project {
   year?: string;
   color: string; // CSS custom property name, e.g. 'pastel-blush'
   aspect: string; // CSS aspect-ratio value
+  cover?: ImageMetadata;
 }
 
 // Real cover photography is added later — each card renders a
@@ -26,11 +30,12 @@ export const projects: Project[] = [
   {
     slug: 'wicker-cradle',
     section: 'product',
-    title: 'A wicker cradle',
-    description: 'Woven seating for a foldable furniture piece, referencing basket-making traditions.',
+    title: 'Rhea',
+    description: 'A wicker cradle',
     year: '2022',
     color: 'pastel-blush',
     aspect: '3 / 4',
+    cover: wickerCradleCover,
   },
   {
     slug: 'folding-easel',

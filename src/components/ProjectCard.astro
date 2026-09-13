@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { Project } from '../data/projects';
 import { withBase } from '../utils/url';
 
@@ -15,14 +16,20 @@ const { project } = Astro.props;
   aria-label={`${project.title} — ${project.description}`}
   style={`--card-color: var(--${project.color}); --card-aspect: ${project.aspect};`}
 >
-  <div class="cover" aria-hidden="true">
-    <span class="cover-label">Photo coming soon</span>
-  </div>
+  {project.cover ? (
+    <Image class="cover-image" src={project.cover} alt="" loading="eager" />
+  ) : (
+    <div class="cover" aria-hidden="true">
+      <span class="cover-label">Photo coming soon</span>
+    </div>
+  )}
 
   <div class="overlay" aria-hidden="true">
     <p class="overlay-title">{project.title}</p>
-    <p class="overlay-desc">{project.description}</p>
-    {project.year && <span class="overlay-year">{project.year}</span>}
+    <div class="overlay-bottom">
+      <p class="overlay-desc">{project.description}</p>
+      {project.year && <span class="overlay-year">{project.year}</span>}
+    </div>
   </div>
 </a>
 
@@ -45,6 +52,14 @@ const { project } = Astro.props;
     background: linear-gradient(150deg, #ececec, #f8f8f8);
   }
 
+  .cover-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .cover-label {
     font-size: var(--text-1);
     color: var(--color-muted);
@@ -55,7 +70,8 @@ const { project } = Astro.props;
     inset: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: flex-start;
     gap: var(--space-2);
     padding: var(--space-5);
     background: var(--card-color);
@@ -73,8 +89,14 @@ const { project } = Astro.props;
   .overlay-title {
     font-family: var(--font-display);
     font-weight: var(--fw-regular);
-    font-size: var(--text-3);
+    font-size: 64px;
     line-height: var(--line-snug);
+  }
+
+  .overlay-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
   }
 
   .overlay-desc {
