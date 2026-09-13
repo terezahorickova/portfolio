@@ -12,10 +12,11 @@ export function getStaticPaths() {
 
 const { project } = Astro.props;
 const sectionHref = withBase(project.section === 'product' ? '/' : `/${project.section}`);
+const cardColor = project.color.startsWith('#') ? project.color : `var(--${project.color})`;
 ---
 
 <BaseLayout title={project.title}>
-  <article class="detail" style={`--card-color: var(--${project.color});`}>
+  <article class="detail" style={`--card-color: ${cardColor};`}>
     <a class="back" href={sectionHref}>&larr; Back to {project.section}</a>
 
     <div class="cover" aria-hidden="true">

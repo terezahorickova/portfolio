@@ -8,13 +8,14 @@ interface Props {
 }
 
 const { project } = Astro.props;
+const cardColor = project.color.startsWith('#') ? project.color : `var(--${project.color})`;
 ---
 
 <a
   class="card"
   href={withBase(`/work/${project.slug}/`)}
   aria-label={`${project.title} — ${project.description}`}
-  style={`--card-color: var(--${project.color}); --card-aspect: ${project.aspect};`}
+  style={`--card-color: ${cardColor}; --card-aspect: ${project.aspect};`}
 >
   {project.cover ? (
     <Image class="cover-image" src={project.cover} alt="" loading="eager" />
