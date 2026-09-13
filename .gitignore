@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# raw source photos dropped in for later use — copy what you need into src/assets/
+/photos/

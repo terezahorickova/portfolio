@@ -30,7 +30,9 @@ const { projects, intro } = Astro.props;
     column-gap: var(--grid-gap-x);
   }
 
-  .grid > * {
+  /* :global() because ProjectCard's root <a> is scoped to its own
+     component and wouldn't otherwise match a plain `.grid > *`. */
+  .grid > :global(*) {
     break-inside: avoid;
     margin-bottom: var(--grid-gap-y);
   }

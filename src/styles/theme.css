@@ -50,8 +50,8 @@
   /* ---- Layout ---- */
   --container-max: 1440px;
   --container-pad: var(--space-6);
-  --grid-gap-x: var(--space-9);
-  --grid-gap-y: var(--space-7);
+  --grid-gap-x: 100px;
+  --grid-gap-y: 100px;
   --nav-height: var(--space-9);
 }
 

@@ -54,6 +54,10 @@ ol {
   padding-inline: var(--container-pad);
 }
 
+main.container {
+  padding-block-start: 50px;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

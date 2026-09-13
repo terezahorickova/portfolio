@@ -1,5 +1,14 @@
 import type { ImageMetadata } from 'astro';
+import buildingBlocksToySetCover from '../assets/covers/building-blocks-toy-set.jpg';
 import wickerCradleCover from '../assets/covers/wicker-cradle.jpg';
+import foldingEaselCover from '../assets/covers/folding-easel.jpg';
+import travelChairCover from '../assets/covers/travel-chair.jpg';
+import corkCompactCover from '../assets/covers/cork-compact.jpg';
+import consoleTableCover from '../assets/covers/console-table.png';
+import fieldKnifeCover from '../assets/covers/field-knife.jpg';
+import guardianFigureCover from '../assets/covers/guardian-figure.jpg';
+import checkeredLoungerCover from '../assets/covers/checkered-lounger.jpg';
+import candleAndTealightSetCover from '../assets/covers/candle-and-tealight-set.jpg';
 
 export type Section = 'product' | 'research' | 'graphics' | 'interests';
 
@@ -26,6 +35,7 @@ export const projects: Project[] = [
     year: '2022',
     color: 'pastel-butter',
     aspect: '4 / 5',
+    cover: buildingBlocksToySetCover,
   },
   {
     slug: 'wicker-cradle',
@@ -45,6 +55,7 @@ export const projects: Project[] = [
     year: '2023',
     color: 'pastel-mint',
     aspect: '3 / 4',
+    cover: foldingEaselCover,
   },
   {
     slug: 'travel-chair',
@@ -54,6 +65,7 @@ export const projects: Project[] = [
     year: '2023',
     color: 'pastel-seafoam',
     aspect: '3 / 4',
+    cover: travelChairCover,
   },
   {
     slug: 'cork-compact',
@@ -63,6 +75,7 @@ export const projects: Project[] = [
     year: '2024',
     color: 'pastel-periwinkle',
     aspect: '4 / 3',
+    cover: corkCompactCover,
   },
   {
     slug: 'console-table',
@@ -72,6 +85,7 @@ export const projects: Project[] = [
     year: '2024',
     color: 'pastel-rose',
     aspect: '4 / 3',
+    cover: consoleTableCover,
   },
   {
     slug: 'field-knife',
@@ -81,6 +95,7 @@ export const projects: Project[] = [
     year: '2024',
     color: 'pastel-butter',
     aspect: '4 / 5',
+    cover: fieldKnifeCover,
   },
   {
     slug: 'guardian-figure',
@@ -90,6 +105,7 @@ export const projects: Project[] = [
     year: '2024',
     color: 'pastel-blush',
     aspect: '4 / 5',
+    cover: guardianFigureCover,
   },
   {
     slug: 'checkered-lounger',
@@ -99,6 +115,7 @@ export const projects: Project[] = [
     year: '2025',
     color: 'pastel-mint',
     aspect: '4 / 3',
+    cover: checkeredLoungerCover,
   },
   {
     slug: 'candle-and-tealight-set',
@@ -108,6 +125,7 @@ export const projects: Project[] = [
     year: '2025',
     color: 'pastel-seafoam',
     aspect: '4 / 3',
+    cover: candleAndTealightSetCover,
   },
 
   // ---- Research ----
