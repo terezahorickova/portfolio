@@ -1,0 +1,70 @@
+/*
+  Design tokens.
+  Fonts: Jacquarda Bastarda 9 (display) + Host Grotesk (body).
+  Six font sizes, all regular weight (400) — hierarchy comes from
+  size and typeface, never from weight.
+*/
+:root {
+  /* ---- Typography ---- */
+  --font-display: 'Jacquarda Bastarda 9', 'Georgia', serif;
+  --font-body: 'Host Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --fw-regular: 400;
+
+  --text-1: 15px; /* captions, meta, footer */
+  --text-2: 20px; /* body copy, nav */
+  --text-3: 24px; /* card titles, overlay titles */
+  --text-4: 36px; /* section intros */
+  --text-5: 48px; /* page-level statements */
+  --text-6: 64px; /* hero / logotype scale */
+
+  --line-tight: 1.1;
+  --line-snug: 1.3;
+  --line-normal: 1.5;
+
+  /* ---- Spacing scale (4px base) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* ---- Color: neutrals ---- */
+  --color-bg: #ffffff;
+  --color-text: #141414;
+  --color-muted: #6b6b6b;
+  --color-border: #e7e7e7;
+
+  /* ---- Color: pastel palette (project overlays / covers) ---- */
+  --pastel-blush: #f5ddcb;
+  --pastel-periwinkle: #dee2f8;
+  --pastel-mint: #ddeacd;
+  --pastel-seafoam: #d8ece7;
+  --pastel-rose: #f8dde3;
+  --pastel-butter: #f6f0c9;
+
+  /* ---- Layout ---- */
+  --container-max: 1440px;
+  --container-pad: var(--space-6);
+  --grid-gap-x: var(--space-9);
+  --grid-gap-y: var(--space-7);
+  --nav-height: var(--space-9);
+}
+
+/* Fluid down-scaling of the two largest steps only — the six-step
+   scale itself doesn't change, just how it's expressed on small
+   viewports so --text-5/--text-6 don't overflow narrow screens. */
+@media (max-width: 640px) {
+  :root {
+    --text-4: 28px;
+    --text-5: 34px;
+    --text-6: 42px;
+    --container-pad: var(--space-4);
+    --grid-gap-x: var(--space-5);
+    --grid-gap-y: var(--space-6);
+  }
+}

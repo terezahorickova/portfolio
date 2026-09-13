@@ -1,0 +1,51 @@
+---
+import { site } from '../data/site';
+---
+
+<footer class="footer">
+  <div class="container bar">
+    <p class="location">{site.location}</p>
+    <div class="contact">
+      <p>{site.instagram}</p>
+      <p>{site.email}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: var(--space-9) var(--space-7);
+  }
+
+  .bar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-5);
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+  }
+
+  .location {
+    font-size: var(--text-1);
+  }
+
+  .contact {
+    text-align: right;
+    font-family: var(--font-body);
+    font-size: var(--text-1);
+    color: var(--color-muted);
+  }
+
+  @media (max-width: 640px) {
+    .bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+    }
+
+    .contact {
+      text-align: left;
+    }
+  }
+</style>

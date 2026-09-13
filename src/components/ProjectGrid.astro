@@ -1,0 +1,51 @@
+---
+import type { Project } from '../data/projects';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  projects: Project[];
+  /** Optional short statement rendered as its own tile in the grid. */
+  intro?: string;
+}
+
+const { projects, intro } = Astro.props;
+---
+
+<div class="grid">
+  {intro && <p class="intro">{intro}</p>}
+  {projects.map((project) => (
+    <ProjectCard project={project} />
+  ))}
+</div>
+
+<style>
+  /*
+    CSS multi-column, not grid: items keep source order and each
+    column stacks by its own content height, so tiles of different
+    aspect ratio don't leave shared-row gaps. Collapses to a single
+    column (still source order) on mobile.
+  */
+  .grid {
+    column-count: 2;
+    column-gap: var(--grid-gap-x);
+  }
+
+  .grid > * {
+    break-inside: avoid;
+    margin-bottom: var(--grid-gap-y);
+  }
+
+  .intro {
+    font-family: var(--font-body);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-4);
+    line-height: var(--line-snug);
+    max-width: 26ch;
+  }
+
+  @media (max-width: 780px) {
+    .grid {
+      column-count: 1;
+    }
+  }
+</style>

@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { projects } from '../../data/projects';
+import { withBase } from '../../utils/url';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const sectionHref = withBase(project.section === 'product' ? '/' : `/${project.section}`);
+---
+
+<BaseLayout title={project.title}>
+  <article class="detail" style={`--card-color: var(--${project.color});`}>
+    <a class="back" href={sectionHref}>&larr; Back to {project.section}</a>
+
+    <div class="cover" aria-hidden="true">
+      <span>Photo coming soon</span>
+    </div>
+
+    <div class="meta">
+      <h1>{project.title}</h1>
+      <p class="description">{project.description}</p>
+      {project.year && <p class="year">{project.year}</p>}
+      <p class="placeholder-note">Full case study for this project is coming soon.</p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .detail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-block: var(--space-6) var(--space-9);
+    max-width: 900px;
+  }
+
+  .back {
+    font-size: var(--text-1);
+    color: var(--color-muted);
+    align-self: flex-start;
+  }
+
+  .back:hover {
+    color: var(--color-text);
+  }
+
+  .cover {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-color);
+    color: var(--color-text);
+    font-size: var(--text-1);
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-5);
+  }
+
+  .description {
+    font-size: var(--text-2);
+    max-width: 60ch;
+  }
+
+  .year {
+    font-size: var(--text-1);
+    color: var(--color-muted);
+  }
+
+  .placeholder-note {
+    font-size: var(--text-1);
+    color: var(--color-muted);
+    font-style: italic;
+  }
+</style>

@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import { getBySection } from '../data/projects';
+
+const projects = getBySection('graphics');
+---
+
+<BaseLayout title="Graphics">
+  <ProjectGrid projects={projects} />
+</BaseLayout>

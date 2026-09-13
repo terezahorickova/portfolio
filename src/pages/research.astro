@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import { getBySection } from '../data/projects';
+
+const projects = getBySection('research');
+---
+
+<BaseLayout title="Research">
+  <ProjectGrid projects={projects} intro="Materials. Nature. Crafts now. Sensory design." />
+</BaseLayout>

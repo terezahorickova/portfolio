@@ -1,0 +1,85 @@
+---
+import { site, nav } from '../data/site';
+import { withBase } from '../utils/url';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => {
+  const full = withBase(href);
+  return href === '/' ? path === full || path === `${full}index.html` : path.startsWith(full);
+};
+---
+
+<header class="header">
+  <div class="container bar">
+    <a href={withBase('/')} class="logo">
+      {site.name.map((line) => (
+        <span class="logo-line">{line}</span>
+      ))}
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="nav-list">
+        {nav.map((item) => (
+          <li>
+            <a href={withBase(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    padding-block: var(--space-5);
+  }
+
+  .bar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-5);
+  }
+
+  .logo {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-3);
+    line-height: var(--line-tight);
+  }
+
+  .nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    font-size: var(--text-1);
+  }
+
+  .nav-list a {
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid transparent;
+  }
+
+  .nav-list a:hover {
+    border-bottom-color: var(--color-text);
+  }
+
+  .nav-list a[aria-current='page'] {
+    border-bottom-color: var(--color-text);
+  }
+
+  @media (max-width: 640px) {
+    .bar {
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .nav-list {
+      gap: var(--space-4);
+    }
+  }
+</style>

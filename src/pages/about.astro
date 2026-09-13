@@ -1,0 +1,200 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+
+const education = [
+  { period: '2016–2020', lines: ['Gymnasium Párovská 1, Nitra, SR'] },
+  {
+    period: '2020–present',
+    lines: ['Design at Faculty of Architecture CTU in Prague, CZ', 'Bachelor and Master degree'],
+  },
+  { period: '2023', lines: ['University of Antwerp, BE', 'ERASMUS exchange'] },
+  { period: 'Summer semester 2025', lines: ['Internship at Design studio D3 at Umprum, CZ'] },
+];
+
+const exhibitions = [
+  { year: '2019', entries: [{ kind: 'Award', text: 'Kanagawa prize – Biennal World Children’s Art Exhibition' }] },
+  {
+    year: '2022',
+    entries: [
+      { kind: 'Award', text: 'Olověný Dušan — winner of category Design' },
+      { kind: 'Exhibition', text: 'Bohemian Perfection — Staroměstká radnice Prague' },
+      { kind: 'Exhibition', text: 'Designblok — Bohemian Perfection & CTU' },
+      { kind: 'Award', text: 'Reborn design — winner of the "Second Life of a Bumper" category (recycled plastic)' },
+    ],
+  },
+  {
+    year: '2023',
+    entries: [
+      { kind: 'Exhibition', text: 'DesignBlok — CTU student installation' },
+      {
+        kind: 'Award',
+        text: 'National Student Design Award — Ergonomics Award from the Czech Ergonomics Society & Award from the Czech Fine Arts Foundation',
+      },
+    ],
+  },
+  { year: '2024', entries: [{ kind: 'Exhibition', text: 'Tiše usilovat o krásu — Krásná práce, Galerie 1, Prague' }] },
+];
+---
+
+<BaseLayout title="About">
+  <section class="about">
+    <div class="col-text">
+      <div class="intro-block">
+        <p>If you are interested in collaboration, write me here</p>
+        <p>ig / {site.instagram}</p>
+        <p>email / {site.email}</p>
+      </div>
+
+      <div class="bio">
+        <p>
+          I am a designer and researcher who finds balance between the quiet wisdom of nature and the dynamic
+          needs of modern society. My design work focuses on the revival and preservation of craftsmanship,
+          addressing environmental issues, and creating toys for children, though experimental materials are
+          also currently among my interests. Alongside product design, I have long been active in graphic
+          design, with experience in creating visual identities, print materials, and digital graphics.
+        </p>
+        <p>
+          I strive to create spaces and objects that invite reflection, celebrate craftsmanship, and bring
+          nature back into our urban lives. I also believe that design should not only be functional and
+          beautiful but should also act as a bridge—connecting people to their environment, their communities,
+          and to the inherent beauty of nature.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>education</h2>
+        <dl>
+          {education.map((entry) => (
+            <div class="entry">
+              <dt>{entry.period}</dt>
+              <dd>
+                {entry.lines.map((line) => (
+                  <p>{line}</p>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <div class="section">
+        <h2>exhibitions / awards</h2>
+        <dl>
+          {exhibitions.map((group) => (
+            <div class="entry">
+              <dt>{group.year}</dt>
+              <dd>
+                {group.entries.map((item) => (
+                  <p><span class="kind">{item.kind}</span> {item.text}</p>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+
+    <div class="portrait" aria-hidden="true">
+      <span>Photo coming soon</span>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: var(--grid-gap-x);
+    padding-block: var(--space-6) var(--space-9);
+  }
+
+  .col-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .intro-block p,
+  .bio p {
+    font-size: var(--text-2);
+    line-height: var(--line-normal);
+  }
+
+  .intro-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .bio {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    max-width: 62ch;
+  }
+
+  .section h2 {
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-4);
+    margin-bottom: var(--space-5);
+  }
+
+  dl {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .entry {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--space-4);
+  }
+
+  .entry dt {
+    font-size: var(--text-1);
+    color: var(--color-muted);
+  }
+
+  .entry dd {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-size: var(--text-1);
+  }
+
+  .kind {
+    color: var(--color-muted);
+    margin-right: var(--space-2);
+  }
+
+  .portrait {
+    aspect-ratio: 3 / 4;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(150deg, #ececec, #f8f8f8);
+    color: var(--color-muted);
+    font-size: var(--text-1);
+  }
+
+  @media (max-width: 900px) {
+    .about {
+      grid-template-columns: 1fr;
+    }
+
+    .portrait {
+      order: -1;
+      max-width: 320px;
+    }
+
+    .entry {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+  }
+</style>
