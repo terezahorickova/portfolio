@@ -74,6 +74,6 @@
    less air between them than the 100px desktop gap. */
 @media (max-width: 780px) {
   :root {
-    --grid-gap-y: 50px;
+    --grid-gap-y: 30px;
   }
 }
