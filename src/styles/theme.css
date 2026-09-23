@@ -68,3 +68,12 @@
     --grid-gap-y: var(--space-6);
   }
 }
+
+/* Matches the card breakpoint in ProjectCard/ProjectGrid where the
+   hover caption becomes static text under the photo — cards need
+   less air between them than the 100px desktop gap. */
+@media (max-width: 780px) {
+  :root {
+    --grid-gap-y: 50px;
+  }
+}

@@ -17,13 +17,15 @@ const cardColor = project.color.startsWith('#') ? project.color : `var(--${proje
   aria-label={`${project.title} — ${project.description}`}
   style={`--card-color: ${cardColor}; --card-aspect: ${project.aspect};`}
 >
-  {project.cover ? (
-    <Image class="cover-image" src={project.cover} alt="" loading="eager" />
-  ) : (
-    <div class="cover" aria-hidden="true">
-      <span class="cover-label">Photo coming soon</span>
-    </div>
-  )}
+  <div class="media">
+    {project.cover ? (
+      <Image class="cover-image" src={project.cover} alt="" loading="eager" />
+    ) : (
+      <div class="cover" aria-hidden="true">
+        <span class="cover-label">Photo coming soon</span>
+      </div>
+    )}
+  </div>
 
   <div class="overlay" aria-hidden="true">
     <p class="overlay-title">{project.title}</p>
@@ -38,10 +40,14 @@ const cardColor = project.color.startsWith('#') ? project.color : `var(--${proje
   .card {
     position: relative;
     display: block;
+    outline-offset: 4px;
+  }
+
+  .media {
+    position: relative;
     aspect-ratio: var(--card-aspect);
     overflow: hidden;
     background: #f0f0f0;
-    outline-offset: 4px;
   }
 
   .cover {
@@ -117,6 +123,28 @@ const cardColor = project.color.startsWith('#') ? project.color : `var(--${proje
   @media (prefers-reduced-motion: reduce) {
     .overlay {
       transition: none;
+    }
+  }
+
+  /* Below desktop, there's no hover: show the caption as static text
+     under the photo instead of a color wash revealed on tap. */
+  @media (max-width: 780px) {
+    .overlay {
+      position: static;
+      opacity: 1;
+      transform: none;
+      background: none;
+      padding: var(--space-2) 0 0;
+      gap: var(--space-1);
+    }
+
+    .overlay-title {
+      font-size: 43px;
+      line-height: var(--line-tight);
+    }
+
+    .overlay-bottom {
+      gap: var(--space-1);
     }
   }
 </style>
