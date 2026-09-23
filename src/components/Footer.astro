@@ -6,7 +6,7 @@ import { site } from '../data/site';
   <div class="container bar">
     <p class="location">{site.location}</p>
     <div class="contact">
-      <p>{site.instagram}</p>
+      <p><a href={site.instagramUrl} target="_blank" rel="noopener noreferrer">{site.instagram}</a></p>
       <p>{site.email}</p>
     </div>
   </div>
@@ -35,6 +35,10 @@ import { site } from '../data/site';
     font-family: var(--font-body);
     font-size: var(--text-1);
     color: var(--color-muted);
+  }
+
+  .contact a:hover {
+    color: var(--color-text);
   }
 
   @media (max-width: 640px) {

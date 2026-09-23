@@ -2,6 +2,7 @@ export const site = {
   name: ['Tereza', 'Horičková'],
   location: 'Based in Prague',
   instagram: '@tereza_horickova',
+  instagramUrl: 'https://www.instagram.com/tereza_horickova/',
   email: 'terezahorickova@gmail.com',
 };
 

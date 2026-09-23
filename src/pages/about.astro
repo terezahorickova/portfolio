@@ -198,4 +198,13 @@ const exhibitions = [
       gap: var(--space-1);
     }
   }
+
+  /* Match the gap the other tabs leave between their last project
+     and the footer, instead of stacking this page's own bottom
+     padding on top of the footer's. */
+  @media (max-width: 780px) {
+    .about {
+      padding-block-end: var(--grid-gap-y);
+    }
+  }
 </style>
