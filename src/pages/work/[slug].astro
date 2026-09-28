@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { projects } from '../../data/projects';
 import { withBase } from '../../utils/url';
@@ -19,15 +20,19 @@ const cardColor = project.color.startsWith('#') ? project.color : `var(--${proje
   <article class="detail" style={`--card-color: ${cardColor};`}>
     <a class="back" href={sectionHref}>&larr; Back to {project.section}</a>
 
-    <div class="cover" aria-hidden="true">
-      <span>Photo coming soon</span>
-    </div>
+    {project.cover ? (
+      <Image class="cover-image" src={project.cover} alt={project.title} loading="eager" />
+    ) : (
+      <div class="cover" aria-hidden="true">
+        <span>Photo coming soon</span>
+      </div>
+    )}
 
     <div class="meta">
       <h1>{project.title}</h1>
       <p class="description">{project.description}</p>
       {project.year && <p class="year">{project.year}</p>}
-      <p class="placeholder-note">Full case study for this project is coming soon.</p>
+      {project.body ? <p class="body">{project.body}</p> : <p class="placeholder-note">Full case study for this project is coming soon.</p>}
     </div>
   </article>
 </BaseLayout>
@@ -61,6 +66,14 @@ const cardColor = project.color.startsWith('#') ? project.color : `var(--${proje
     font-size: var(--text-1);
   }
 
+  .cover-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
   .meta {
     display: flex;
     flex-direction: column;
@@ -81,6 +94,13 @@ const cardColor = project.color.startsWith('#') ? project.color : `var(--${proje
   .year {
     font-size: var(--text-1);
     color: var(--color-muted);
+  }
+
+  .body {
+    font-size: var(--text-1);
+    line-height: var(--line-normal);
+    max-width: 60ch;
+    margin-top: var(--space-2);
   }
 
   .placeholder-note {

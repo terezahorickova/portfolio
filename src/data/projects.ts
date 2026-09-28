@@ -25,6 +25,7 @@ export interface Project {
   color: string; // CSS custom property name, e.g. 'pastel-blush'
   aspect: string; // CSS aspect-ratio value
   cover?: ImageMetadata;
+  body?: string; // longer write-up shown on the project detail page
 }
 
 // Real cover photography is added later — each card renders a
@@ -90,6 +91,7 @@ export const projects: Project[] = [
     color: 'pastel-blush',
     aspect: '3 / 4',
     cover: wickerCradleCover,
+    body: 'The wicker cradle Rhea was created as part of the Bohemian Perfection project, a collaboration between students and traditional craftspeople. As part of this initiative, I focused on the craft of basketry and designed a baby cradle for infants up to 8 months of age. My goal was to modernize the craft and traditional production of wicker baskets, maximizing the use of natural materials while giving them a contemporary design. I was personally involved in the fabrication process, spending many days in the workshop with master basket weaver Mr. Kráľ to gain invaluable hands-on experience in this beautiful craft.',
   },
   {
     slug: 'console-table',
