@@ -56,8 +56,13 @@ export interface Project {
   detail?: ProjectDetail;
 }
 
-// Real cover photography is added later — each card renders a
-// placeholder cover until then, keyed by the same `color`.
+// Every project gets the same detail page (see src/pages/work/[slug].astro).
+// To fill one in, add to its entry below — each part is optional and the
+// page just leaves out whatever is missing:
+//   cover   big photo under the intro (also the card photo)
+//   body    intro paragraph
+//   detail: { intro, credits, columns, gallery }
+// Use the "wicker-cradle" (Rhea) entry as the worked example.
 export const projects: Project[] = [
   // ---- Product ----
   {
@@ -119,17 +124,17 @@ export const projects: Project[] = [
     color: 'pastel-blush',
     aspect: '3 / 4',
     cover: wickerCradleCover,
-    body: 'The wicker cradle Rhea was created as part of the Bohemian Perfection project, a collaboration between students and traditional craftspeople. As part of this initiative, I focused on the craft of basketry and designed a baby cradle for infants up to 8 months of age. My goal was to modernize the craft and traditional production of wicker baskets, maximizing the use of natural materials while giving them a contemporary design. I was personally involved in the fabrication process, spending many days in the workshop with master basket weaver Mr. Kráľ to gain invaluable hands-on experience in this beautiful craft.',
+    body: 'The wicker cradle Rhea was created as part of the Bohemian Perfection project, a collaboration between students and traditional craftspeople. As part of this initiative, I focused on the craft of basketry and designed a baby cradle for infants up to 8 months of age. My goal was to modernize the craft and traditional production of wicker baskets, maximizing the use of natural materials while giving them a contemporary design. I was personally involved in the fabrication process, spending many days in the workshop with master basket weaver Mr. Král to gain invaluable hands-on experience in this beautiful craft.',
     detail: {
       intro: rheaIntro,
-      credits: ['Collaboration: Jan Kráľ', 'Photography: Tereza Horičková'],
+      credits: ['Collaboration: Petr Král', 'Photography: Tereza Horičková'],
       columns: [
         [
           'When I was little, my parents would put me down to sleep in the fresh air in good weather, in a basket hung on the terrace, rocking me to sleep as I lay there. This motion is pleasantly soothing for small children. I tried to make use of these memories: my cradle can be rocked, can stand firmly on the floor, and can also be hung from a ceiling or a terrace. This is possible thanks to a simple anti-rocking brake in the form of a wooden log, and thanks to leather straps that can be attached not only to the frame but also to ropes, so the cradle can be suspended in the space.',
-          'I spent several days in the workshop of basket weaver Peter Kráľ, helping him weave a basket, or rather trying to.',
+          'I spent several days in the workshop of basket weaver Petr Král, helping him weave a basket, or rather trying to.',
         ],
         [
-          'Weaving in the willow rods is physically demanding work that requires strong hands, and after just a few rods mine always started to ache. Mr. Kráľ, however, managed it with ease, and the basket was finished in 3 days.',
+          'Weaving in the willow rods is physically demanding work that requires strong hands, and after just a few rods mine always started to ache. Mr. Král, however, managed it with ease, and the basket was finished in 3 days.',
           'Besides the skilled craftsmen and myself, I involved my whole family in the production. My father and I found old leather from a gym mat, my uncle brought plywood, my grandmother linen sheets: simply “whatever the house could give”. It seems to me that even this process continues traditions of the past. When a woman was expecting a baby, the whole family pooled together whatever it had, so that the new arrival would feel good from the very first moment.',
         ],
       ],

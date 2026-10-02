@@ -2,7 +2,6 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { projects } from '../../data/projects';
-import { withBase } from '../../utils/url';
 
 export function getStaticPaths() {
   return projects.map((project) => ({
@@ -11,67 +10,74 @@ export function getStaticPaths() {
   }));
 }
 
+// Every project page uses this one layout. Each part below is optional
+// and is simply left out until the project has content for it — see
+// Project / ProjectDetail in src/data/projects.ts.
 const { project } = Astro.props;
-const sectionHref = withBase(project.section === 'product' ? '/' : `/${project.section}`);
 const cardColor = project.color.startsWith('#') ? project.color : `var(--${project.color})`;
 const detail = project.detail;
 const subtitle = [project.description, project.year].filter(Boolean).join(', ');
-const galleryCols = detail
-  ? (['left', 'right'] as const).map((col) => ({
-      col,
-      items: detail.gallery
-        .map((image, index) => ({ ...image, index }))
-        .filter((image) => image.col === col),
-    }))
-  : [];
+const gallery = detail?.gallery ?? [];
+const galleryCols = (['left', 'right'] as const).map((col) => ({
+  col,
+  items: gallery.map((image, index) => ({ ...image, index })).filter((image) => image.col === col),
+}));
 ---
 
 <BaseLayout title={project.title}>
-  {detail ? (
-    <article class="story">
-      <section class="intro">
-        {detail.intro && (
-          <div class="intro-photo">
-            <Image src={detail.intro} alt={`${project.title} in use`} widths={[600, 1000]} sizes="(max-width: 780px) 100vw, 360px" loading="eager" />
-          </div>
-        )}
-        <div class="intro-text">
-          <h1>{project.title}</h1>
-          <p class="subtitle">{subtitle}</p>
-          {project.body && <p class="story-body">{project.body}</p>}
-          {detail.credits && (
-            <p class="credits">
-              {detail.credits.map((line) => (
-                <span>{line}</span>
-              ))}
-            </p>
-          )}
+  <article class="story" style={`--card-color: ${cardColor};`}>
+    <section class="intro">
+      {detail?.intro && (
+        <div class="intro-photo">
+          <Image src={detail.intro} alt={`${project.title} in use`} widths={[600, 1000]} sizes="(max-width: 780px) 100vw, 360px" loading="eager" />
         </div>
+      )}
+      <div class="intro-text">
+        <h1>{project.title}</h1>
+        <p class="subtitle">{subtitle}</p>
+        {project.body ? (
+          <p class="story-body">{project.body}</p>
+        ) : (
+          <p class="placeholder-note">Full case study for this project is coming soon.</p>
+        )}
+        {detail?.credits && (
+          <p class="credits">
+            {detail.credits.map((line) => (
+              <span>{line}</span>
+            ))}
+          </p>
+        )}
+      </div>
+    </section>
+
+    {project.cover ? (
+      <Image
+        class="hero"
+        src={project.cover}
+        alt={project.title}
+        widths={[800, 1400, 1800]}
+        sizes="(max-width: 940px) 100vw, 900px"
+        loading="eager"
+      />
+    ) : (
+      <div class="hero-placeholder" aria-hidden="true">
+        <span>Photo coming soon</span>
+      </div>
+    )}
+
+    {detail?.columns && (
+      <section class="columns">
+        {detail.columns.map((paragraphs) => (
+          <div class="column">
+            {paragraphs.map((text) => (
+              <p>{text}</p>
+            ))}
+          </div>
+        ))}
       </section>
+    )}
 
-      {project.cover && (
-        <Image
-          class="hero"
-          src={project.cover}
-          alt={project.title}
-          widths={[800, 1400, 1800]}
-          sizes="(max-width: 940px) 100vw, 900px"
-          loading="eager"
-        />
-      )}
-
-      {detail.columns && (
-        <section class="columns">
-          {detail.columns.map((paragraphs) => (
-            <div class="column">
-              {paragraphs.map((text) => (
-                <p>{text}</p>
-              ))}
-            </div>
-          ))}
-        </section>
-      )}
-
+    {gallery.length > 0 && (
       <section class="gallery">
         {galleryCols.map(({ col, items }) => (
           <div class={`gallery-col gallery-col--${col}`}>
@@ -89,96 +95,11 @@ const galleryCols = detail
           </div>
         ))}
       </section>
-    </article>
-  ) : (
-  <article class="detail" style={`--card-color: ${cardColor};`}>
-    <a class="back" href={sectionHref}>&larr; Back to {project.section}</a>
-
-    {project.cover ? (
-      <Image class="cover-image" src={project.cover} alt={project.title} loading="eager" />
-    ) : (
-      <div class="cover" aria-hidden="true">
-        <span>Photo coming soon</span>
-      </div>
     )}
-
-    <div class="meta">
-      <h1>{project.title}</h1>
-      <p class="description">{project.description}</p>
-      {project.year && <p class="year">{project.year}</p>}
-      {project.body ? <p class="body">{project.body}</p> : <p class="placeholder-note">Full case study for this project is coming soon.</p>}
-    </div>
   </article>
-  )}
 </BaseLayout>
 
 <style>
-  .detail {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
-    padding-block: var(--space-6) var(--space-9);
-    max-width: 900px;
-  }
-
-  .back {
-    font-size: var(--text-1);
-    color: var(--color-muted);
-    align-self: flex-start;
-  }
-
-  .back:hover {
-    color: var(--color-text);
-  }
-
-  .cover {
-    aspect-ratio: 16 / 9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--card-color);
-    color: var(--color-text);
-    font-size: var(--text-1);
-  }
-
-  .cover-image {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-  }
-
-  .meta {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  h1 {
-    font-family: var(--font-display);
-    font-weight: var(--fw-regular);
-    font-size: var(--text-5);
-  }
-
-  .description {
-    font-size: var(--text-2);
-    max-width: 60ch;
-  }
-
-  .year {
-    font-size: var(--text-1);
-    color: var(--color-muted);
-  }
-
-  .body {
-    font-size: var(--text-1);
-    line-height: var(--line-normal);
-    max-width: 60ch;
-    margin-top: var(--space-2);
-  }
-
-  /* ---- Editorial layout (projects with `detail`) ---- */
   .story {
     display: flex;
     flex-direction: column;
@@ -207,6 +128,12 @@ const galleryCols = detail
     gap: var(--space-3);
   }
 
+  h1 {
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: var(--text-5);
+  }
+
   .subtitle {
     font-size: var(--text-2);
   }
@@ -214,6 +141,13 @@ const galleryCols = detail
   .story-body {
     font-size: var(--text-1);
     line-height: var(--line-normal);
+    margin-top: var(--space-2);
+  }
+
+  .placeholder-note {
+    font-size: var(--text-1);
+    color: var(--color-muted);
+    font-style: italic;
     margin-top: var(--space-2);
   }
 
@@ -229,6 +163,16 @@ const galleryCols = detail
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  .hero-placeholder {
+    aspect-ratio: 3 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-color);
+    color: var(--color-text);
+    font-size: var(--text-1);
   }
 
   .columns {
@@ -316,11 +260,5 @@ const galleryCols = detail
       width: 100%;
       order: var(--i);
     }
-  }
-
-  .placeholder-note {
-    font-size: var(--text-1);
-    color: var(--color-muted);
-    font-style: italic;
   }
 </style>
