@@ -62,8 +62,13 @@ const galleryCols = detail
 
       {detail.columns && (
         <section class="columns">
-          <p>{detail.columns[0]}</p>
-          <p>{detail.columns[1]}</p>
+          {detail.columns.map((paragraphs) => (
+            <div class="column">
+              {paragraphs.map((text) => (
+                <p>{text}</p>
+              ))}
+            </div>
+          ))}
         </section>
       )}
 
@@ -228,23 +233,32 @@ const galleryCols = detail
 
   .columns {
     display: grid;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 8.5% 32% 19.5% 32%;
   }
 
-  .columns p {
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .column:first-child {
+    grid-column: 2;
+  }
+
+  .column:last-child {
+    grid-column: 4;
+  }
+
+  .column p {
     font-size: var(--text-1);
     line-height: var(--line-normal);
-  }
-
-  .columns p:first-child {
-    max-width: 36ch;
-    margin-left: 9%;
   }
 
   .gallery {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 1%;
+    column-gap: 100px;
     align-items: start;
   }
 
@@ -283,9 +297,9 @@ const galleryCols = detail
       grid-column: 1;
     }
 
-    .columns p:first-child {
-      max-width: none;
-      margin-left: 0;
+    .column:first-child,
+    .column:last-child {
+      grid-column: 1;
     }
 
     .gallery {
