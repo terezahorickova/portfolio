@@ -14,9 +14,78 @@ export function getStaticPaths() {
 const { project } = Astro.props;
 const sectionHref = withBase(project.section === 'product' ? '/' : `/${project.section}`);
 const cardColor = project.color.startsWith('#') ? project.color : `var(--${project.color})`;
+const detail = project.detail;
+const subtitle = [project.description, project.year].filter(Boolean).join(', ');
+const galleryCols = detail
+  ? (['left', 'right'] as const).map((col) => ({
+      col,
+      items: detail.gallery
+        .map((image, index) => ({ ...image, index }))
+        .filter((image) => image.col === col),
+    }))
+  : [];
 ---
 
 <BaseLayout title={project.title}>
+  {detail ? (
+    <article class="story">
+      <section class="intro">
+        {detail.intro && (
+          <div class="intro-photo">
+            <Image src={detail.intro} alt={`${project.title} in use`} widths={[600, 1000]} sizes="(max-width: 780px) 100vw, 360px" loading="eager" />
+          </div>
+        )}
+        <div class="intro-text">
+          <h1>{project.title}</h1>
+          <p class="subtitle">{subtitle}</p>
+          {project.body && <p class="story-body">{project.body}</p>}
+          {detail.credits && (
+            <p class="credits">
+              {detail.credits.map((line) => (
+                <span>{line}</span>
+              ))}
+            </p>
+          )}
+        </div>
+      </section>
+
+      {project.cover && (
+        <Image
+          class="hero"
+          src={project.cover}
+          alt={project.title}
+          widths={[800, 1400, 1800]}
+          sizes="(max-width: 940px) 100vw, 900px"
+          loading="eager"
+        />
+      )}
+
+      {detail.columns && (
+        <section class="columns">
+          <p>{detail.columns[0]}</p>
+          <p>{detail.columns[1]}</p>
+        </section>
+      )}
+
+      <section class="gallery">
+        {galleryCols.map(({ col, items }) => (
+          <div class={`gallery-col gallery-col--${col}`}>
+            {items.map((image) => (
+              <Image
+                class="gallery-img"
+                style={`--size: ${image.size ?? 100}%; --i: ${image.index};`}
+                src={image.src}
+                alt={image.alt}
+                widths={[500, 900]}
+                sizes="(max-width: 780px) 100vw, 450px"
+                loading="lazy"
+              />
+            ))}
+          </div>
+        ))}
+      </section>
+    </article>
+  ) : (
   <article class="detail" style={`--card-color: ${cardColor};`}>
     <a class="back" href={sectionHref}>&larr; Back to {project.section}</a>
 
@@ -35,6 +104,7 @@ const cardColor = project.color.startsWith('#') ? project.color : `var(--${proje
       {project.body ? <p class="body">{project.body}</p> : <p class="placeholder-note">Full case study for this project is coming soon.</p>}
     </div>
   </article>
+  )}
 </BaseLayout>
 
 <style>
@@ -101,6 +171,137 @@ const cardColor = project.color.startsWith('#') ? project.color : `var(--${proje
     line-height: var(--line-normal);
     max-width: 60ch;
     margin-top: var(--space-2);
+  }
+
+  /* ---- Editorial layout (projects with `detail`) ---- */
+  .story {
+    display: flex;
+    flex-direction: column;
+    gap: var(--grid-gap-y);
+    max-width: 900px;
+    margin-inline: auto;
+    padding-bottom: var(--space-9);
+  }
+
+  .intro {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    align-items: start;
+  }
+
+  .intro-photo img {
+    display: block;
+    width: 67%;
+    height: auto;
+  }
+
+  .intro-text {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .subtitle {
+    font-size: var(--text-2);
+  }
+
+  .story-body {
+    font-size: var(--text-1);
+    line-height: var(--line-normal);
+    margin-top: var(--space-2);
+  }
+
+  .credits {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--space-5);
+    font-size: var(--text-1);
+    line-height: var(--line-normal);
+  }
+
+  .hero {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: 60% 40%;
+  }
+
+  .columns p {
+    font-size: var(--text-1);
+    line-height: var(--line-normal);
+  }
+
+  .columns p:first-child {
+    max-width: 36ch;
+    margin-left: 9%;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1%;
+    align-items: start;
+  }
+
+  .gallery-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+  }
+
+  .gallery-col--left {
+    align-items: flex-start;
+  }
+
+  .gallery-col--right {
+    align-items: flex-end;
+  }
+
+  .gallery-img {
+    display: block;
+    width: var(--size);
+    height: auto;
+  }
+
+  @media (max-width: 780px) {
+    .intro,
+    .columns {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+
+    .intro-photo img {
+      width: 100%;
+    }
+
+    .intro-text {
+      grid-column: 1;
+    }
+
+    .columns p:first-child {
+      max-width: none;
+      margin-left: 0;
+    }
+
+    .gallery {
+      display: flex;
+      flex-direction: column;
+      gap: var(--grid-gap-y);
+    }
+
+    .gallery-col {
+      display: contents;
+    }
+
+    .gallery-img {
+      width: 100%;
+      order: var(--i);
+    }
   }
 
   .placeholder-note {

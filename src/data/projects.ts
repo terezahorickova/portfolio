@@ -13,8 +13,35 @@ import postFiestaCover from '../assets/covers/post-fiesta.jpg';
 import castMaterialSamplesCover from '../assets/covers/cast-material-samples.jpg';
 import wovenWillowStudyCover from '../assets/covers/woven-willow-study.jpg';
 import resinAndPigmentFrameCover from '../assets/covers/resin-and-pigment-frame.jpg';
+import rheaIntro from '../assets/rhea/intro.jpg';
+import rheaStraw from '../assets/rhea/straw.jpg';
+import rheaHands from '../assets/rhea/hands.jpg';
+import rheaBelt from '../assets/rhea/belt.jpg';
+import rheaRocker from '../assets/rhea/rocker.jpg';
+import rheaLegs from '../assets/rhea/legs.jpg';
+import rheaSwing from '../assets/rhea/swing.jpg';
+import rheaSigns from '../assets/rhea/signs.jpg';
+import rheaBaby from '../assets/rhea/baby.jpg';
 
 export type Section = 'product' | 'research' | 'graphics' | 'interests';
+
+export interface GalleryImage {
+  src: ImageMetadata;
+  alt: string;
+  col: 'left' | 'right';
+  /** Width as a percentage of its column on desktop (default 100). */
+  size?: number;
+}
+
+/** Optional editorial layout for a project's detail page. */
+export interface ProjectDetail {
+  /** Portrait photo shown beside the intro text. */
+  intro?: ImageMetadata;
+  credits?: string[];
+  /** Two text columns shown under the hero photo. */
+  columns?: [string, string];
+  gallery: GalleryImage[];
+}
 
 export interface Project {
   slug: string;
@@ -26,6 +53,7 @@ export interface Project {
   aspect: string; // CSS aspect-ratio value
   cover?: ImageMetadata;
   body?: string; // longer write-up shown on the project detail page
+  detail?: ProjectDetail;
 }
 
 // Real cover photography is added later — each card renders a
@@ -92,6 +120,20 @@ export const projects: Project[] = [
     aspect: '3 / 4',
     cover: wickerCradleCover,
     body: 'The wicker cradle Rhea was created as part of the Bohemian Perfection project, a collaboration between students and traditional craftspeople. As part of this initiative, I focused on the craft of basketry and designed a baby cradle for infants up to 8 months of age. My goal was to modernize the craft and traditional production of wicker baskets, maximizing the use of natural materials while giving them a contemporary design. I was personally involved in the fabrication process, spending many days in the workshop with master basket weaver Mr. Kráľ to gain invaluable hands-on experience in this beautiful craft.',
+    detail: {
+      intro: rheaIntro,
+      credits: ['Collaboration: Jan Kráľ', 'Photography: Tereza Horičková'],
+      gallery: [
+        { src: rheaStraw, alt: 'Bundles of willow rods in the workshop', col: 'left', size: 82 },
+        { src: rheaLegs, alt: 'The cradle’s rocking runners on a tiled floor', col: 'right' },
+        { src: rheaHands, alt: 'Fastening the canvas lining inside the cradle', col: 'left', size: 82 },
+        { src: rheaSwing, alt: 'Rhea hung as a swing in the exhibition', col: 'right', size: 75 },
+        { src: rheaBelt, alt: 'Leather strap and woven rim detail', col: 'left', size: 82 },
+        { src: rheaSigns, alt: 'Craft certification signs in the basket weaver’s workshop', col: 'right' },
+        { src: rheaRocker, alt: 'Steel frame joined to a wooden runner', col: 'left' },
+        { src: rheaBaby, alt: 'A baby lying in the cradle', col: 'right', size: 75 },
+      ],
+    },
   },
   {
     slug: 'console-table',
