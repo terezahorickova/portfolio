@@ -217,7 +217,7 @@ export const projects: Project[] = [
     slug: 'console-table',
     section: 'product',
     title: 'Jilemnice',
-    description: 'Urban furniture collection',
+    description: 'Bus stops for Jilemnice',
     year: '2024',
     color: 'pastel-rose',
     aspect: '4 / 3',
