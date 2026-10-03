@@ -13,6 +13,17 @@ import postFiestaCover from '../assets/covers/post-fiesta.jpg';
 import castMaterialSamplesCover from '../assets/covers/cast-material-samples.jpg';
 import wovenWillowStudyCover from '../assets/covers/woven-willow-study.jpg';
 import resinAndPigmentFrameCover from '../assets/covers/resin-and-pigment-frame.jpg';
+import tarpHero from '../assets/tarp-chair/hero.webp';
+import tarpFolded from '../assets/tarp-chair/folded.jpg';
+import tarpBending from '../assets/tarp-chair/bending.jpg';
+import tarpVelcro from '../assets/tarp-chair/velcro.jpg';
+import tarpFabric from '../assets/tarp-chair/fabric.jpg';
+import tarpSitting from '../assets/tarp-chair/sitting.jpg';
+import tarpSittingBlur from '../assets/tarp-chair/sitting-blur.jpg';
+import tarpTubes from '../assets/tarp-chair/tubes.jpg';
+import tarpWashing from '../assets/tarp-chair/washing.jpg';
+import tarpOutlineLounge from '../assets/tarp-chair/outline-lounge.jpg';
+import tarpOutlineChair from '../assets/tarp-chair/outline-chair.jpg';
 import jilemniceIntro from '../assets/jilemnice/intro.jpg';
 import jilemniceCyclist from '../assets/jilemnice/cyclist.jpg';
 import jilemniceSnow from '../assets/jilemnice/snow.jpg';
@@ -63,6 +74,8 @@ export interface ProjectDetail {
   intro?: ImageMetadata;
   /** Big photo under the intro; defaults to the project's `cover`. */
   hero?: ImageMetadata;
+  /** Hero is an already-optimized animated image: skip Astro's image processing so it keeps moving. */
+  heroAnimated?: boolean;
   credits?: string[];
   /** Two text columns (each a list of paragraphs) shown under the hero photo. */
   columns?: [string[], string[]];
@@ -253,6 +266,25 @@ export const projects: Project[] = [
     color: '#CCCCCC',
     aspect: '3 / 4',
     cover: travelChairCover,
+    body: 'As part of an internship in the product design studio at UMPRUM, we were to design a folding chair in collaboration with a company of our choice. I chose FREITAG, whose specialty is making bags and backpacks from used truck tarps. My folding chair design combines upcycled materials with an adjustable system.\n\nThanks to a detachable backrest and an extendable seat, it can easily be transformed into a low lounge chair. It is made of steel tubes, old truck tarps and seat-belt webbing. The product reflects the philosophy of circular design and offers a new way of rescuing used tarps from waste. Each piece is unique, with its own traces of use and its own colour.',
+    detail: {
+      intro: travelChairCover,
+      hero: tarpHero,
+      heroAnimated: true,
+      credits: ['Photography: Tereza Horičková'],
+      gallery: [
+        { src: tarpFolded, alt: 'The tarp chair folded flat against a concrete wall', col: 'left', size: 91 },
+        { src: tarpOutlineChair, alt: 'Line drawing of the tarp chair', col: 'right', size: 91 },
+        { src: tarpWashing, alt: 'Washing a used truck tarp in a bathtub', col: 'left', size: 91 },
+        { src: tarpSitting, alt: 'A person sitting in the tarp chair', col: 'right', size: 91 },
+        { src: tarpOutlineLounge, alt: 'Line drawing of the chair converted to a lounge chair', col: 'left', size: 91 },
+        { src: tarpSittingBlur, alt: 'A person sitting down in the chair', col: 'right', size: 91 },
+        { src: tarpBending, alt: 'Attaching the backrest to the chair frame', col: 'left', size: 91 },
+        { src: tarpTubes, alt: 'Bent steel tubes and a sketch in the workshop', col: 'right', size: 91 },
+        { src: tarpVelcro, alt: 'Fastening the tarp seat with straps', col: 'left', size: 91 },
+        { src: tarpFabric, alt: 'Fitting the tarp seat onto the steel frame', col: 'left', size: 91 },
+      ],
+    },
   },
   {
     slug: 'guardian-figure',

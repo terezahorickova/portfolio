@@ -55,7 +55,9 @@ const galleryCols = (['left', 'right'] as const).map((col) => ({
       </div>
     </section>
 
-    {hero ? (
+    {hero && detail?.heroAnimated ? (
+      <img class="hero" src={hero.src} alt={project.title} width={hero.width} height={hero.height} loading="eager" />
+    ) : hero ? (
       <Image
         class="hero"
         src={hero}
