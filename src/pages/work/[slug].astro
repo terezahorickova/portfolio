@@ -20,6 +20,9 @@ const subtitle = [project.description, project.year].filter(Boolean).join(', ');
 const hero = detail?.hero ?? project.cover;
 const bodyParagraphs = project.body ? project.body.split(/\n\s*\n/) : [];
 const gallery = detail?.gallery ?? [];
+const fullImages = gallery
+  .map((image, index) => ({ ...image, index }))
+  .filter((image) => image.col === 'full');
 const galleryCols = (['left', 'right'] as const).map((col) => ({
   col,
   items: gallery.map((image, index) => ({ ...image, index })).filter((image) => image.col === col),
@@ -95,6 +98,17 @@ const galleryCols = (['left', 'right'] as const).map((col) => ({
               />
             ))}
           </div>
+        ))}
+        {fullImages.map((image) => (
+          <Image
+            class="gallery-img gallery-img--full"
+            style={`--size: ${image.size ?? 100}%; --i: ${image.index};`}
+            src={image.src}
+            alt={image.alt}
+            widths={[900, 1600]}
+            sizes="(max-width: 940px) 100vw, 900px"
+            loading="lazy"
+          />
         ))}
       </section>
     )}
@@ -209,7 +223,12 @@ const galleryCols = (['left', 'right'] as const).map((col) => ({
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 100px;
+    row-gap: var(--space-7);
     align-items: start;
+  }
+
+  .gallery-img--full {
+    grid-column: 1 / -1;
   }
 
   .gallery-col {

@@ -13,6 +13,13 @@ import postFiestaCover from '../assets/covers/post-fiesta.jpg';
 import castMaterialSamplesCover from '../assets/covers/cast-material-samples.jpg';
 import wovenWillowStudyCover from '../assets/covers/woven-willow-study.jpg';
 import resinAndPigmentFrameCover from '../assets/covers/resin-and-pigment-frame.jpg';
+import jilemniceIntro from '../assets/jilemnice/intro.jpg';
+import jilemniceCyclist from '../assets/jilemnice/cyclist.jpg';
+import jilemniceSnow from '../assets/jilemnice/snow.jpg';
+import jilemniceLeaf from '../assets/jilemnice/leaf.jpg';
+import jilemniceDots from '../assets/jilemnice/dots.jpg';
+import jilemniceElevations from '../assets/jilemnice/elevations.jpg';
+import jilemniceExploded from '../assets/jilemnice/exploded.jpg';
 import ayaHero from '../assets/aya/hero.jpg';
 import ayaJointDark from '../assets/aya/joint-dark.jpg';
 import ayaFolded from '../assets/aya/folded.jpg';
@@ -44,7 +51,8 @@ export type Section = 'product' | 'research' | 'graphics' | 'interests';
 export interface GalleryImage {
   src: ImageMetadata;
   alt: string;
-  col: 'left' | 'right';
+  /** 'full' spans both columns, in a row after the left/right photos. */
+  col: 'left' | 'right' | 'full';
   /** Width as a percentage of its column on desktop (default 100). */
   size?: number;
 }
@@ -214,6 +222,27 @@ export const projects: Project[] = [
     color: 'pastel-rose',
     aspect: '4 / 3',
     cover: consoleTableCover,
+    body: 'Jilemnice, a picturesque town in the foothills of the Krkonoše, approached us with a request to create a unified system of urban furniture and bus stops that would look contemporary while respecting the historic atmosphere of the town.\n\nThe design of the bus stops combines the character of urban stops, with their slender construction and glass surfaces, with the robustness typical of stops in rural settings. The welded steel structure is complemented by perforated sheet metal, which gives the stop a distinctive visual character. We moved away from traditional, inconspicuous solutions with a bold red colour and daring shaping.\n\nThe perforation is based on simple circular holes that group into motifs referring to the identity of Jilemnice: a skier on a snowy slope, a symbol of the cradle of Czech skiing, or falling leaves recalling the surrounding landscape.',
+    detail: {
+      intro: jilemniceIntro,
+      credits: ['Team collaboration: Tereza Horičková, Ela Dlugopolská, Jitka Šulcová'],
+      columns: [
+        [
+          'Jilemnice is a picturesque town in the Liberec Region in the north of the Czech Republic, in the foothills of the Krkonoše. It lies in the valley of the small river Jilemka and is known as one of the gateways to the Krkonoše National Park. The first written mention of Jilemnice dates from 1356, although the area had been settled much earlier. In the Middle Ages the town developed as a centre of crafts and trade, and it saw significant growth thanks to textile processing.',
+        ],
+        [
+          'Jilemnice is considered the cradle of Czech skiing. It is home to the Krkonoše Museum, which deals with the history of the town and with winter sports. The town’s landmark is a Baroque château surrounded by a park, which today serves as a cultural and exhibition centre. Visitors are also drawn to the historic houses on the square and the surrounding nature, ideal for hiking or winter sports.',
+        ],
+      ],
+      gallery: [
+        { src: jilemniceCyclist, alt: 'The bus stop on a summer street, with a cyclist passing', col: 'left', size: 91 },
+        { src: jilemniceSnow, alt: 'The bus stop in winter snow', col: 'right', size: 91 },
+        { src: jilemniceLeaf, alt: 'Leaf motifs perforated into the bus stop wall', col: 'left', size: 91 },
+        { src: jilemniceDots, alt: 'Detail of the perforation pattern', col: 'right', size: 91 },
+        { src: jilemniceElevations, alt: 'Elevations of the bus stop with leaf and figure perforations', col: 'full' },
+        { src: jilemniceExploded, alt: 'Exploded drawing of the bus stop construction', col: 'full' },
+      ],
+    },
   },
   {
     slug: 'travel-chair',
