@@ -17,6 +17,7 @@ const { project } = Astro.props;
 const cardColor = project.color.startsWith('#') ? project.color : `var(--${project.color})`;
 const detail = project.detail;
 const subtitle = [project.description, project.year].filter(Boolean).join(', ');
+const hero = detail?.hero ?? project.cover;
 const gallery = detail?.gallery ?? [];
 const galleryCols = (['left', 'right'] as const).map((col) => ({
   col,
@@ -50,10 +51,10 @@ const galleryCols = (['left', 'right'] as const).map((col) => ({
       </div>
     </section>
 
-    {project.cover ? (
+    {hero ? (
       <Image
         class="hero"
-        src={project.cover}
+        src={hero}
         alt={project.title}
         widths={[800, 1400, 1800]}
         sizes="(max-width: 940px) 100vw, 900px"

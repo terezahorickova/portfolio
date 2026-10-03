@@ -13,6 +13,15 @@ import postFiestaCover from '../assets/covers/post-fiesta.jpg';
 import castMaterialSamplesCover from '../assets/covers/cast-material-samples.jpg';
 import wovenWillowStudyCover from '../assets/covers/woven-willow-study.jpg';
 import resinAndPigmentFrameCover from '../assets/covers/resin-and-pigment-frame.jpg';
+import kockiHero from '../assets/kocki/hero.jpg';
+import kockiShip from '../assets/kocki/ship.jpg';
+import kockiRobot from '../assets/kocki/robot.jpg';
+import kockiTraffic from '../assets/kocki/traffic.jpg';
+import kockiCube from '../assets/kocki/cube.jpg';
+import kockiBox from '../assets/kocki/box.jpg';
+import kockiPlay1 from '../assets/kocki/play-1.jpg';
+import kockiPlay2 from '../assets/kocki/play-2.jpg';
+import kockiPlay3 from '../assets/kocki/play-3.jpg';
 import rheaIntro from '../assets/rhea/intro.jpg';
 import rheaStraw from '../assets/rhea/straw.jpg';
 import rheaHands from '../assets/rhea/hands.jpg';
@@ -37,6 +46,8 @@ export interface GalleryImage {
 export interface ProjectDetail {
   /** Portrait photo shown beside the intro text. */
   intro?: ImageMetadata;
+  /** Big photo under the intro; defaults to the project's `cover`. */
+  hero?: ImageMetadata;
   credits?: string[];
   /** Two text columns (each a list of paragraphs) shown under the hero photo. */
   columns?: [string[], string[]];
@@ -74,6 +85,29 @@ export const projects: Project[] = [
     color: 'pastel-butter',
     aspect: '4 / 5',
     cover: buildingBlocksToySetCover,
+    body: 'My bachelor’s thesis deals with the design of KOCKI, an educational building set for preschool children. Its aim is to connect a didactic aid with a toy, so that while playing the child is not only entertained but also learns something. The set uses traditional wooden blocks in an unconventional way. The combination of colourful pegs and irregularly drilled holes in the blocks lets children create many structures, from various animals and houses to cars and planes. In addition, children can build all kinds of experimental structures in which they explore the laws of balance and gravity. In this way, while playing, children become cubist architects who discover the limits of their imagination as well as the laws of physics.',
+    detail: {
+      intro: buildingBlocksToySetCover,
+      hero: kockiHero,
+      columns: [
+        [
+          'The mathematically oriented placement of the holes offers an opportunity to learn basic mathematical operations. It also includes a cord for threading the blocks.',
+        ],
+        [
+          'Besides joining the individual blocks, the coloured pegs also allow children to decorate their structures graphically, bringing simple geometric shapes to life. The set develops the child’s motor and cognitive skills while also providing plenty of room for imagination.',
+        ],
+      ],
+      gallery: [
+        { src: kockiShip, alt: 'A ship built from Kocki blocks with a red cord', col: 'left', size: 82 },
+        { src: kockiTraffic, alt: 'A traffic light and a car built from Kocki blocks', col: 'right' },
+        { src: kockiCube, alt: 'A single drilled wooden block with green pegs', col: 'left', size: 82 },
+        { src: kockiRobot, alt: 'A robot built from Kocki blocks and coloured pegs', col: 'right', size: 82 },
+        { src: kockiBox, alt: 'The Kocki set in its wooden box', col: 'left', size: 82 },
+        { src: kockiPlay1, alt: 'A child building with Kocki blocks on the floor', col: 'right', size: 82 },
+        { src: kockiPlay2, alt: 'Child’s hands holding a block with coloured pegs', col: 'left', size: 82 },
+        { src: kockiPlay3, alt: 'A child playing with blocks and pegs', col: 'right', size: 82 },
+      ],
+    },
   },
   {
     slug: 'folding-easel',
