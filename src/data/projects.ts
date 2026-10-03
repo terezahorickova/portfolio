@@ -13,6 +13,13 @@ import postFiestaCover from '../assets/covers/post-fiesta.jpg';
 import castMaterialSamplesCover from '../assets/covers/cast-material-samples.jpg';
 import wovenWillowStudyCover from '../assets/covers/woven-willow-study.jpg';
 import resinAndPigmentFrameCover from '../assets/covers/resin-and-pigment-frame.jpg';
+import ayaHero from '../assets/aya/hero.jpg';
+import ayaJointDark from '../assets/aya/joint-dark.jpg';
+import ayaFolded from '../assets/aya/folded.jpg';
+import ayaPair from '../assets/aya/pair.jpg';
+import ayaLegEdge from '../assets/aya/leg-edge.jpg';
+import ayaJoint from '../assets/aya/joint.jpg';
+import ayaVeneer from '../assets/aya/veneer.jpg';
 import kockiHero from '../assets/kocki/hero.jpg';
 import kockiShip from '../assets/kocki/ship.jpg';
 import kockiRobot from '../assets/kocki/robot.jpg';
@@ -118,6 +125,20 @@ export const projects: Project[] = [
     color: '#D7D2C3',
     aspect: '3 / 4',
     cover: foldingEaselCover,
+    body: 'The AYA table trestles use the elegance of bent beech plywood combined with a simple construction of boards. The main function of a trestle is to provide stable and firm support for the tabletop, which is excellently ensured by the glued laminated wood. It shows resistance to deformation and damage, so there is no risk of the wood breaking under the weight of the table.\n\nMy goal was to design table trestles that look pleasant and neutral, so that they can be placed both in residential interiors and in public spaces. An important consideration for me was the space they take up, and so the AYA trestles can be easily stacked into one another.',
+    detail: {
+      intro: foldingEaselCover,
+      hero: ayaHero,
+      credits: ['Photography: Tereza Horičková'],
+      gallery: [
+        { src: ayaJointDark, alt: 'Close-up of the joint between the leg and rail of an AYA trestle', col: 'left', size: 91 },
+        { src: ayaFolded, alt: 'Two AYA trestles folded against a concrete wall', col: 'right', size: 91 },
+        { src: ayaPair, alt: 'An AYA trestle beside a table frame', col: 'left', size: 91 },
+        { src: ayaLegEdge, alt: 'The laminated edge of an AYA trestle leg', col: 'right', size: 91 },
+        { src: ayaJoint, alt: 'The bent beech joint of an AYA trestle', col: 'left', size: 91 },
+        { src: ayaVeneer, alt: 'Layered veneer edges', col: 'right', size: 91 },
+      ],
+    },
   },
   {
     slug: 'field-knife',

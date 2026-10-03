@@ -18,6 +18,7 @@ const cardColor = project.color.startsWith('#') ? project.color : `var(--${proje
 const detail = project.detail;
 const subtitle = [project.description, project.year].filter(Boolean).join(', ');
 const hero = detail?.hero ?? project.cover;
+const bodyParagraphs = project.body ? project.body.split(/\n\s*\n/) : [];
 const gallery = detail?.gallery ?? [];
 const galleryCols = (['left', 'right'] as const).map((col) => ({
   col,
@@ -36,8 +37,8 @@ const galleryCols = (['left', 'right'] as const).map((col) => ({
       <div class="intro-text">
         <h1>{project.title}</h1>
         <p class="subtitle">{subtitle}</p>
-        {project.body ? (
-          <p class="story-body">{project.body}</p>
+        {bodyParagraphs.length > 0 ? (
+          bodyParagraphs.map((text) => <p class="story-body">{text}</p>)
         ) : (
           <p class="placeholder-note">Full case study for this project is coming soon.</p>
         )}
@@ -143,6 +144,10 @@ const galleryCols = (['left', 'right'] as const).map((col) => ({
     font-size: var(--text-1);
     line-height: var(--line-normal);
     margin-top: var(--space-2);
+  }
+
+  .story-body + .story-body {
+    margin-top: var(--space-1);
   }
 
   .placeholder-note {
