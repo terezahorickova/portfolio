@@ -5,7 +5,14 @@ import foldingEaselCover from '../assets/covers/folding-easel.jpg';
 import travelChairCover from '../assets/covers/travel-chair.jpg';
 import corkCompactCover from '../assets/covers/cork-compact.jpg';
 import consoleTableCover from '../assets/covers/console-table.png';
-import fieldKnifeCover from '../assets/covers/field-knife.jpg';
+import fieldKnifeCover from '../assets/hori-hori/poster.jpg';
+import horiBlueprint from '../assets/hori-hori/blueprint.jpg';
+import horiSketches from '../assets/hori-hori/sketches.jpg';
+import horiClay from '../assets/hori-hori/clay.jpg';
+import horiRender from '../assets/hori-hori/render.jpg';
+import horiVariants from '../assets/hori-hori/variants.jpg';
+import horiSnow1 from '../assets/hori-hori/snow-1.jpg';
+import horiSnow2 from '../assets/hori-hori/snow-2.jpg';
 import guardianFigureCover from '../assets/covers/guardian-figure.jpg';
 import checkeredLoungerCover from '../assets/covers/checkered-lounger.jpg';
 import candleAndTealightSetCover from '../assets/covers/candle-and-tealight-set.jpg';
@@ -168,8 +175,21 @@ export const projects: Project[] = [
     description: 'A gardening knife',
     year: '2025',
     color: 'pastel-seafoam',
-    aspect: '4 / 5',
+    aspect: '2 / 3',
     cover: fieldKnifeCover,
+    body: 'The Hori Hori knife originated in Japan hundreds of years ago as a universal tool for Japanese hunters (matagi), fishermen and mountain gatherers of wild vegetables (sansai). Its name means “to dig, dig”. From the original bamboo or iron models it evolved into a multipurpose tool for digging, weeding and cutting, and modern versions have serrated or smooth blades, depth markings and a steel construction, which has earned them worldwide popularity for their effectiveness in gardening.\n\nI decided to design my HORI HORI knife for the brand Gardena, a respected manufacturer of garden supplies and tools, which does not yet have this type of knife in its portfolio.',
+    detail: {
+      intro: fieldKnifeCover,
+      hero: horiBlueprint,
+      gallery: [
+        { src: horiRender, alt: 'Render of the Hori hori knife with a Gardena handle', col: 'left', size: 91 },
+        { src: horiVariants, alt: 'Four colour variants of the Gardena Hori hori knife', col: 'right', size: 91 },
+        { src: horiClay, alt: 'Clay and wood handle prototypes leading to the final knife', col: 'left', size: 91 },
+        { src: horiSketches, alt: 'Pencil sketches of Hori hori handle shapes', col: 'right', size: 91 },
+        { src: horiSnow1, alt: 'The knife held blade-down in the snow', col: 'left', size: 91 },
+        { src: horiSnow2, alt: 'The knife held in a hand over snow, showing the cm ruler', col: 'right', size: 91 },
+      ],
+    },
   },
   {
     slug: 'cork-compact',

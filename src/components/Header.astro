@@ -193,6 +193,15 @@ const isActive = (href: string) => {
     }
   }
 
+  /* On wide screens the header spans the full window (logo far left,
+     tabs far right) while the page content stays centered. */
+  @media (min-width: 781px) {
+    .bar {
+      max-width: none;
+      padding-inline: var(--space-5);
+    }
+  }
+
   /* Keep the logo and menu reachable while scrolling on mobile/tablet. */
   @media (max-width: 780px) {
     .header {
