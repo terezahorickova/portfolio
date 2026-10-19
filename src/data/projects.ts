@@ -20,6 +20,15 @@ import postFiestaCover from '../assets/covers/post-fiesta.jpg';
 import castMaterialSamplesCover from '../assets/covers/cast-material-samples.jpg';
 import wovenWillowStudyCover from '../assets/covers/woven-willow-study.jpg';
 import resinAndPigmentFrameCover from '../assets/covers/resin-and-pigment-frame.jpg';
+import sidaGirl from '../assets/sida/girl.jpg';
+import sidaLounger from '../assets/sida/lounger.jpg';
+import sidaChecker from '../assets/sida/checker.jpg';
+import sidaSloth from '../assets/sida/sloth.jpg';
+import sidaLying from '../assets/sida/lying.jpg';
+import sidaTwoKids from '../assets/sida/two-kids.jpg';
+import sidaBackToBack from '../assets/sida/back-to-back.jpg';
+import sidaRenders from '../assets/sida/renders.jpg';
+import sidaParts from '../assets/sida/parts.jpg';
 import tarpHero from '../assets/tarp-chair/hero.webp';
 import tarpFolded from '../assets/tarp-chair/folded.jpg';
 import tarpBending from '../assets/tarp-chair/bending.jpg';
@@ -78,8 +87,20 @@ export interface GalleryImage {
   animated?: boolean;
 }
 
+/** A photo in the 3-column mosaic layout. Portrait = 3:4 (2 grid rows), landscape = 3:2 (1 row). */
+export interface MosaicTile {
+  src: ImageMetadata;
+  alt: string;
+  col: 1 | 2 | 3;
+  /** 1-based grid row where the tile starts; rows are half a portrait photo tall. */
+  row: number;
+  shape: 'portrait' | 'landscape';
+}
+
 /** Optional editorial layout for a project's detail page. */
 export interface ProjectDetail {
+  /** If set, the page uses the full-width 3-column mosaic instead of the standard layout. */
+  mosaic?: MosaicTile[];
   /** Portrait photo shown beside the intro text. */
   intro?: ImageMetadata;
   /** Big photo under the intro; defaults to the project's `cover`. */
@@ -327,6 +348,21 @@ export const projects: Project[] = [
     color: 'pastel-mint',
     aspect: '4 / 3',
     cover: checkeredLoungerCover,
+    body: 'SIDA is a variable rocker for children up to 7 years old, which can change from a lounger into a rocking chair or a ride-on toy. It is made of recycled materials used in the automotive industry. These materials can no longer be used there, but a good rocker gives them a valuable second life. SIDA also comes in several shapes, from a universal one to animal motifs such as the sloth.\n\nSIDA was created as part of the Reborn Design competition, which focused on using recycled materials from the construction and automotive industries. Besides the categories for a second life of construction waste and of tyres, a category for a second life of a bumper was also announced, and that is where I entered. During the semester we attended several workshops and lectures where we learned about using secondary materials. I decided to use recycled plastic because it is the biggest problem for humankind in terms of volume, and it is also easy to work with. In the end I found a use for another “waste” material as well: offcuts of seat belts.',
+    detail: {
+      credits: ['Photography: Tereza Horičková'],
+      mosaic: [
+        { src: sidaGirl, alt: 'A girl sitting on the SIDA rocker under trees', col: 3, row: 1, shape: 'portrait' },
+        { src: sidaLounger, alt: 'The woven seat of the SIDA lounger from above', col: 1, row: 3, shape: 'landscape' },
+        { src: sidaChecker, alt: 'Close-up of the checkerboard weave of the seat', col: 2, row: 4, shape: 'portrait' },
+        { src: sidaSloth, alt: 'The sloth-shaped side of the SIDA rocker', col: 1, row: 6, shape: 'portrait' },
+        { src: sidaLying, alt: 'A boy lying back in the SIDA rocker', col: 3, row: 6, shape: 'landscape' },
+        { src: sidaRenders, alt: 'Renders of two SIDA variants made from recycled plastic', col: 2, row: 8, shape: 'landscape' },
+        { src: sidaTwoKids, alt: 'Two children riding the SIDA rocker together', col: 3, row: 8, shape: 'portrait' },
+        { src: sidaParts, alt: 'The parts of SIDA laid out in a box', col: 1, row: 9, shape: 'landscape' },
+        { src: sidaBackToBack, alt: 'Two children sitting back to back on the SIDA rocker', col: 2, row: 10, shape: 'landscape' },
+      ],
+    },
   },
   {
     slug: 'candle-and-tealight-set',

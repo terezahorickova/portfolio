@@ -58,6 +58,19 @@ main.container {
   padding-block-start: 50px;
 }
 
+main.container.wide {
+  max-width: none;
+  padding-inline: var(--space-5);
+}
+
+/* In the full-width mosaic the first photo sits right under the header
+   (whose own bottom padding matches the side margins) so it fits the window. */
+@media (min-width: 1200px) {
+  main.container.wide {
+    padding-block-start: 0;
+  }
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

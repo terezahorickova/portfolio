@@ -33,14 +33,47 @@ gallery.forEach((image, index) => {
 const sections = sectionLists.map((list) =>
   (['left', 'right'] as const).map((col) => ({ col, items: list.filter((image) => image.col === col) })),
 );
+const mosaic = detail?.mosaic;
 ---
 
-<BaseLayout title={project.title}>
+<BaseLayout title={project.title} wide={!!mosaic}>
+  {mosaic ? (
+    <article class="mosaic">
+      <div class="mosaic-grid">
+        <div class="mosaic-text">
+          <h1>{project.title}</h1>
+          <p class="subtitle">{subtitle}</p>
+          {bodyParagraphs.map((text) => <p class="story-body">{text}</p>)}
+          {detail?.credits && (
+            <p class="credits">
+              {detail.credits.map((line) => (
+                <span>{line}</span>
+              ))}
+            </p>
+          )}
+        </div>
+        {mosaic.map((tile, index) => (
+          <div
+            class={`mosaic-tile mosaic-tile--${tile.shape}`}
+            style={`--c: ${tile.col}; --r: ${tile.row}; --i: ${index};`}
+          >
+            <Image
+              src={tile.src}
+              alt={tile.alt}
+              widths={[500, 800, 1200, 1600]}
+              sizes="(max-width: 780px) 100vw, 33vw"
+              loading={index < 3 ? 'eager' : 'lazy'}
+            />
+          </div>
+        ))}
+      </div>
+    </article>
+  ) : (
   <article class="story" style={`--card-color: ${cardColor};`}>
     <section class="intro">
       {detail?.intro && (
         <div class="intro-photo">
-          <Image src={detail.intro} alt={`${project.title} in use`} widths={[600, 1000]} sizes="(max-width: 780px) 100vw, 360px" loading="eager" />
+          <Image src={detail.intro} alt={`${project.title} in use`} widths={[600, 1000, 1400]} sizes="(max-width: 780px) 100vw, 560px" loading="eager" />
         </div>
       )}
       <div class="intro-text">
@@ -68,8 +101,8 @@ const sections = sectionLists.map((list) =>
         class="hero"
         src={hero}
         alt={project.title}
-        widths={[800, 1400, 1800]}
-        sizes="(max-width: 940px) 100vw, 900px"
+        widths={[800, 1400, 1800, 2400]}
+        sizes="(max-width: 1440px) 100vw, 1376px"
         loading="eager"
       />
     ) : (
@@ -113,8 +146,8 @@ const sections = sectionLists.map((list) =>
                       style={`--size: ${image.size ?? 100}%; --i: ${image.index};`}
                       src={image.src}
                       alt={image.alt}
-                      widths={[500, 900]}
-                      sizes="(max-width: 780px) 100vw, 450px"
+                      widths={[500, 900, 1300]}
+                      sizes="(max-width: 780px) 100vw, 600px"
                       loading="lazy"
                     />
                   ),
@@ -129,23 +162,125 @@ const sections = sectionLists.map((list) =>
             style={`--size: ${image.size ?? 100}%; --i: ${image.index};`}
             src={image.src}
             alt={image.alt}
-            widths={[900, 1600]}
-            sizes="(max-width: 940px) 100vw, 900px"
+            widths={[900, 1600, 2400]}
+            sizes="(max-width: 1440px) 100vw, 1376px"
             loading="lazy"
           />
         ))}
       </section>
     )}
   </article>
+  )}
 </BaseLayout>
 
 <style>
+  /* ---- Mosaic layout (projects with `detail.mosaic`) ----
+     3 equal columns; one grid row is half a portrait photo (a 3:4
+     portrait spans 2 rows, a 3:2 landscape spans 1), so tiles stack
+     corner to corner. */
+  .mosaic {
+    container-type: inline-size;
+    padding-bottom: var(--space-9);
+  }
+
+  .mosaic-grid {
+    --gap: 10px;
+    --cell: calc((100cqw - 2 * var(--gap)) / 3);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: var(--gap);
+    grid-auto-rows: calc(var(--cell) * 2 / 3);
+  }
+
+  /* Text fills exactly one column (the same width as the photo columns),
+     bottom-aligned beside the first photo, and scales with the column
+     width so it always fits the two rows. */
+  .mosaic-text {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: end;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: 0 0 var(--space-5);
+    font-size: clamp(11px, calc(var(--cell) * 0.026), 15px);
+  }
+
+  .mosaic-text h1 {
+    font-size: clamp(28px, calc(var(--cell) * 0.07), 48px);
+    line-height: var(--line-tight);
+  }
+
+  .mosaic-text .subtitle {
+    font-size: clamp(13px, calc(var(--cell) * 0.036), 20px);
+  }
+
+  .mosaic-text .story-body,
+  .mosaic-text .credits {
+    font-size: inherit;
+    line-height: 1.45;
+  }
+
+  .mosaic-tile {
+    grid-column: var(--c);
+    overflow: hidden;
+  }
+
+  .mosaic-tile--portrait {
+    grid-row: var(--r) / span 2;
+  }
+
+  .mosaic-tile--landscape {
+    grid-row: var(--r) / span 1;
+  }
+
+  .mosaic-tile :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 1199px) {
+    .mosaic-grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--grid-gap-y);
+      max-width: 720px;
+      margin-inline: auto;
+    }
+
+    .mosaic-text {
+      order: -1;
+      padding: 0;
+      font-size: var(--text-1);
+    }
+
+    .mosaic-text h1 {
+      font-size: var(--text-5);
+    }
+
+    .mosaic-text .subtitle {
+      font-size: var(--text-2);
+    }
+
+    .mosaic-tile {
+      order: var(--i);
+    }
+
+    .mosaic-tile--portrait {
+      aspect-ratio: 3 / 4;
+    }
+
+    .mosaic-tile--landscape {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
   .story {
     display: flex;
     flex-direction: column;
     gap: var(--grid-gap-y);
-    max-width: 900px;
-    margin-inline: auto;
     padding-bottom: var(--space-9);
   }
 
