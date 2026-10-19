@@ -1,14 +1,439 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectGrid from '../components/ProjectGrid.astro';
-import { getBySection } from '../data/projects';
+import { site } from '../data/site';
+import { withBase } from '../utils/url';
+import portrait from '../assets/front/portrait.jpg';
+import productPhoto from '../assets/front/product.jpg';
+import researchPhoto from '../assets/front/research.jpg';
+import graphicsPhoto from '../assets/front/graphics.jpg';
+import landartPhoto from '../assets/front/landart.jpg';
+import photographyPhoto from '../assets/front/photography.jpg';
+import sidequestsPhoto from '../assets/front/sidequests.jpg';
+import squiggle from '../assets/front/squiggle.png';
+import chevron from '../assets/front/chevron.png';
+import heart from '../assets/front/heart.png';
 
-const projects = getBySection('product');
+const design = [
+  { label: 'Product design', href: '/product', photo: productPhoto, alt: 'Detail of a bent beech AYA trestle' },
+  { label: 'Research', href: '/research', photo: researchPhoto, alt: 'A bioplastic sample held up to the window' },
+  { label: 'Graphic design', href: '/graphics', photo: graphicsPhoto, alt: 'A book and plant samples laid out on a white table' },
+];
+
+const interests = [
+  { label: 'Landart', href: '/interests', photo: landartPhoto, alt: 'A round seed-like object lying in a field of wheat' },
+  { label: 'Photography', href: '/interests', photo: photographyPhoto, alt: 'Thick mooring ropes coiled on a quay' },
+  { label: 'Side quests', href: '/interests', photo: sidequestsPhoto, alt: 'People weaving willow in a workshop' },
+];
+
+// x / y are the position of each phrase as a percentage of the grey section.
+const values = [
+  { text: 'connect people', x: 40.6, y: 9 },
+  { text: 'is simple', x: 21.7, y: 18.6 },
+  { text: 'is playful', x: 71.7, y: 20 },
+  { text: 'feels good', x: 56.2, y: 31.5 },
+  { text: 'helps', x: 19, y: 63.8 },
+  { text: 'builds communities', x: 48.3, y: 64.6 },
+  { text: 'is sustainable', x: 31, y: 80.9 },
+  { text: 'is practical', x: 67.8, y: 81.4 },
+];
 ---
 
-<BaseLayout title="Product">
-  <ProjectGrid
-    projects={projects}
-    intro="Revival and preservation of craftsmanship, addressing environmental issues, toys for children, experimental materials."
-  />
+<BaseLayout title="Home" home>
+  <section class="hero">
+    <div class="hero-inner">
+      <h1 class="hero-title">
+        <span>Tereza</span>
+        <span>Horičková</span>
+      </h1>
+      <p class="hero-text">
+        Reviving crafts, exploring experimental materials, and addressing ecological challenges to create design
+        that doesn’t just catch the eye — it speaks to every sense.
+      </p>
+    </div>
+  </section>
+
+  <div class="hero-blend" aria-hidden="true"></div>
+
+  <section class="about wrap">
+    <div class="about-left">
+      <img class="squiggle" src={squiggle.src} width={squiggle.width} height={squiggle.height} alt="" />
+      <div class="about-copy">
+        <a class="about-label" href={withBase('/about')}>About</a>
+        <p class="about-text">
+          I am a designer and researcher based in Prague, who finds balance between the quiet wisdom of nature and
+          the dynamic needs of modern society. My design work focuses on the revival and preservation of
+          craftsmanship, addressing environmental issues, and creating toys for children, though experimental
+          materials are also currently among my interests.
+        </p>
+      </div>
+    </div>
+    <div class="about-photo">
+      <Image src={portrait} alt="Portrait of Tereza Horičková" widths={[400, 700, 1000]} sizes="(max-width: 780px) 100vw, 26vw" loading="eager" />
+    </div>
+  </section>
+
+  <section class="cards wrap">
+    {design.map((item) => (
+      <a class="card" href={withBase(item.href)}>
+        <span class="card-label">
+          <span>{item.label}</span>
+          <img class="chevron" src={chevron.src} width={chevron.width} height={chevron.height} alt="" />
+        </span>
+        <Image class="card-photo" src={item.photo} alt={item.alt} widths={[400, 700, 1000]} sizes="(max-width: 780px) 100vw, 21vw" />
+      </a>
+    ))}
+  </section>
+
+  <section class="values">
+    <div class="values-stage">
+      {values.map((v) => (
+        <p class="value" style={`--x: ${v.x}; --y: ${v.y};`}>{v.text}</p>
+      ))}
+      <p class="values-title">
+        <span>i</span>
+        <img class="heart" src={heart.src} width={heart.width} height={heart.height} alt="love" />
+        <span>when design</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="interests wrap">
+    <h2>My other interests</h2>
+    <div class="cards">
+      {interests.map((item) => (
+        <a class="card" href={withBase(item.href)}>
+          <span class="card-label">
+            <span>{item.label}</span>
+            <img class="chevron" src={chevron.src} width={chevron.width} height={chevron.height} alt="" />
+          </span>
+          <Image class="card-photo" src={item.photo} alt={item.alt} widths={[400, 700, 1000]} sizes="(max-width: 780px) 100vw, 21vw" />
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="cta">
+    <p>
+      If you are interested in collaboration, contact me via{' '}
+      <a href={site.instagramUrl} target="_blank" rel="noopener noreferrer">instagram</a> or{' '}
+      <a href={`mailto:${site.email}`}>email</a>.
+    </p>
+  </section>
 </BaseLayout>
+
+<style>
+  /* Everything is sized in vw (and capped) so the page scales like the mockup. */
+  .wrap {
+    width: min(64vw, 1100px);
+    margin-inline: auto;
+  }
+
+  /* ---- Hero ---- */
+  /* The green hero (together with the header above it) always fills the
+     whole window on load, so no white strip shows below it. */
+  .hero {
+    background: var(--front-green);
+    min-height: max(360px, calc(100vh - var(--header-h)));
+    min-height: max(360px, calc(100svh - var(--header-h)));
+  }
+
+  /* A soft fade from the hero's green into the white page below it. */
+  .hero-blend {
+    height: clamp(32px, 4vw, 90px);
+    background: linear-gradient(to bottom, var(--front-green), var(--color-bg));
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 37% 1fr;
+    padding: 5vw 0 6vw 14%;
+  }
+
+  .hero-title {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: clamp(40px, 5vw, 84px);
+    line-height: 1.05;
+  }
+
+  .hero-text {
+    align-self: start;
+    margin-top: 8vw;
+    max-width: 19em;
+    font-size: clamp(15px, 1.6vw, 24px);
+    line-height: 1.45;
+  }
+
+  /* ---- About ---- */
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 40%;
+    padding-top: 5vw;
+  }
+
+  .about-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3vw;
+  }
+
+  .squiggle {
+    width: clamp(120px, 20vw, 300px);
+    height: auto;
+    image-rendering: pixelated;
+  }
+
+  .about-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4vw;
+    max-width: 64%;
+  }
+
+  .about-label,
+  .about-text {
+    font-size: clamp(13px, 1.05vw, 17px);
+    line-height: 1.4;
+  }
+
+  .about-label {
+    align-self: flex-start;
+  }
+
+  .about-photo :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  /* ---- Photo rows ---- */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .about + .cards {
+    margin-top: 8vw;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4vw;
+  }
+
+  .card-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 22%;
+    font-size: clamp(15px, 1.8vw, 24px);
+  }
+
+  .chevron {
+    height: clamp(13px, 2vw, 26px);
+    width: auto;
+  }
+
+  .card-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  /* ---- Values (grey) ---- */
+  .values {
+    margin-top: 8.7vw;
+    background: var(--front-grey);
+  }
+
+  .values-stage {
+    position: relative;
+    height: min(56vw, 900px);
+  }
+
+  .value {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc(var(--y) * 1%);
+    white-space: nowrap;
+    font-size: clamp(15px, 1.9vw, 26px);
+  }
+
+  .values-title {
+    position: absolute;
+    left: 50%;
+    top: 47.5%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 0.35em;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-weight: var(--fw-regular);
+    font-size: clamp(30px, 4.8vw, 80px);
+    line-height: 1;
+  }
+
+  .heart {
+    height: 0.8em;
+    width: auto;
+    image-rendering: pixelated;
+  }
+
+  /* ---- Other interests ---- */
+  .interests {
+    padding-top: 7.7vw;
+  }
+
+  .interests h2 {
+    margin-bottom: 4.5vw;
+    font-weight: var(--fw-regular);
+    font-size: clamp(26px, 3.5vw, 56px);
+    line-height: 1.1;
+  }
+
+  /* ---- Closing line (the green footer continues below it) ---- */
+  .cta {
+    margin-top: 8.7vw;
+    padding: 9vw 24px 0;
+    background: var(--front-green);
+    text-align: center;
+  }
+
+  .cta p {
+    max-width: 30em;
+    margin-inline: auto;
+    font-size: clamp(15px, 1.9vw, 24px);
+    line-height: 1.4;
+  }
+
+  .cta a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  /* ---- Phones and tablets: a single readable column ---- */
+  @media (max-width: 780px) {
+    .wrap {
+      width: auto;
+      margin-inline: var(--space-5);
+    }
+
+    .hero-inner {
+      display: block;
+      padding: 40px var(--space-5) 56px;
+    }
+
+    .hero-title {
+      font-size: 44px;
+    }
+
+    .hero-text {
+      margin-top: var(--space-6);
+      font-size: var(--text-2);
+    }
+
+    .about {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      padding-top: var(--space-8);
+    }
+
+    .about-left {
+      gap: var(--space-5);
+    }
+
+    .about-copy {
+      gap: var(--space-3);
+      max-width: none;
+    }
+
+    .about-label,
+    .about-text {
+      font-size: var(--text-1);
+    }
+
+    .squiggle {
+      width: 160px;
+    }
+
+    .cards {
+      grid-template-columns: 1fr;
+      gap: var(--space-7);
+    }
+
+    .about + .cards {
+      margin-top: var(--space-8);
+    }
+
+    .card {
+      gap: var(--space-3);
+    }
+
+    .card-label {
+      padding-right: 0;
+      font-size: var(--text-2);
+    }
+
+    .chevron {
+      height: 20px;
+    }
+
+    .values {
+      margin-top: var(--space-9);
+    }
+
+    .values-stage {
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-9) var(--space-5);
+    }
+
+    .value,
+    .values-title {
+      position: static;
+      transform: none;
+    }
+
+    .value {
+      font-size: var(--text-2);
+    }
+
+    .values-title {
+      order: -1;
+      margin-bottom: var(--space-5);
+      font-size: 36px;
+    }
+
+    .interests {
+      padding-top: var(--space-9);
+    }
+
+    .interests h2 {
+      margin-bottom: var(--space-6);
+      font-size: 32px;
+    }
+
+    .cta {
+      margin-top: var(--space-9);
+      padding-top: var(--space-9);
+    }
+
+    .cta p {
+      font-size: var(--text-2);
+    }
+  }
+</style>

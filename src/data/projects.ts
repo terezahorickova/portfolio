@@ -5,7 +5,7 @@ import foldingEaselCover from '../assets/covers/folding-easel.jpg';
 import travelChairCover from '../assets/covers/travel-chair.jpg';
 import corkCompactCover from '../assets/covers/cork-compact.jpg';
 import consoleTableCover from '../assets/covers/console-table.png';
-import fieldKnifeCover from '../assets/hori-hori/poster.jpg';
+import horiPoster from '../assets/hori-hori/poster.jpg';
 import horiBlueprint from '../assets/hori-hori/blueprint.jpg';
 import horiSketches from '../assets/hori-hori/sketches.jpg';
 import horiClay from '../assets/hori-hori/clay.jpg';
@@ -13,6 +13,7 @@ import horiRender from '../assets/hori-hori/render.jpg';
 import horiVariants from '../assets/hori-hori/variants.jpg';
 import horiSnow1 from '../assets/hori-hori/snow-1.jpg';
 import horiSnow2 from '../assets/hori-hori/snow-2.jpg';
+import horiGround from '../assets/hori-hori/ground.jpg';
 import guardianFigureCover from '../assets/covers/guardian-figure.jpg';
 import checkeredLoungerCover from '../assets/covers/checkered-lounger.jpg';
 import candleAndTealightSetCover from '../assets/covers/candle-and-tealight-set.jpg';
@@ -200,18 +201,19 @@ export const projects: Project[] = [
     year: '2025',
     color: 'pastel-seafoam',
     aspect: '2 / 3',
-    cover: fieldKnifeCover,
-    body: 'The Hori Hori knife originated in Japan hundreds of years ago as a universal tool for Japanese hunters (matagi), fishermen and mountain gatherers of wild vegetables (sansai). Its name means “to dig, dig”. From the original bamboo or iron models it evolved into a multipurpose tool for digging, weeding and cutting, and modern versions have serrated or smooth blades, depth markings and a steel construction, which has earned them worldwide popularity for their effectiveness in gardening.\n\nI decided to design my HORI HORI knife for the brand Gardena, a respected manufacturer of garden supplies and tools, which does not yet have this type of knife in its portfolio.',
+    cover: horiSnow2,
+    body: 'The traditional Japanese Hori Hori knife (literally “dig, dig”) originally originated as a versatile tool for mountain gatherers and hunters. Thanks to its remarkable multi-functionality, it gradually became a popular worldwide favorite, fully replacing several specialized tools in the garden at once.\n\nThe primary motivation for designing my own interpretation of this tool was its versatility and strong popularity among users. The design focuses on ergonomics, safety, and diverse practical utility. The dual-sided blade, combining a smooth and a serrated edge, is tailored for both right- and left-handed users, allowing seamless digging, weeding, and cutting without the need to switch tools. An integrated centimeter scale on the blade facilitates precise measurement of planting depth and spacing between seedlings.',
     detail: {
-      intro: fieldKnifeCover,
+      intro: horiSnow1,
       hero: horiBlueprint,
       gallery: [
-        { src: horiRender, alt: 'Render of the Hori hori knife with a Gardena handle', col: 'left', size: 91 },
-        { src: horiVariants, alt: 'Four colour variants of the Gardena Hori hori knife', col: 'right', size: 91 },
-        { src: horiClay, alt: 'Clay and wood handle prototypes leading to the final knife', col: 'left', size: 91 },
-        { src: horiSketches, alt: 'Pencil sketches of Hori hori handle shapes', col: 'right', size: 91 },
-        { src: horiSnow1, alt: 'The knife held blade-down in the snow', col: 'left', size: 91 },
-        { src: horiSnow2, alt: 'The knife held in a hand over snow, showing the cm ruler', col: 'right', size: 91 },
+        { src: horiRender, alt: 'Render of the Hori hori knife with a Gardena handle', col: 'left' },
+        { src: horiSnow2, alt: 'The knife held in a hand over snow, showing the cm ruler', col: 'right', size: 83 },
+        { src: horiVariants, alt: 'Four colour variants of the Gardena Hori hori knife', col: 'left' },
+        { src: horiPoster, alt: 'Poster with a line drawing of the Hori hori knife', col: 'right', size: 83 },
+        { src: horiClay, alt: 'Clay and wood handle prototypes leading to the final knife', col: 'left' },
+        { src: horiSketches, alt: 'Pencil sketches of Hori hori handle shapes', col: 'right', size: 83 },
+        { src: horiGround, alt: 'The knife lying on the ground', col: 'left', size: 83 },
       ],
     },
   },

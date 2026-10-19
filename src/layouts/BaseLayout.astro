@@ -8,9 +8,11 @@ interface Props {
   title: string;
   /** Let the page content span the full window width (used by mosaic project pages). */
   wide?: boolean;
+  /** The front page: tinted header/footer, hidden logo, full-bleed sections. */
+  home?: boolean;
 }
 
-const { title, wide = false } = Astro.props;
+const { title, wide = false, home = false } = Astro.props;
 ---
 
 <html lang="en">
@@ -19,7 +21,7 @@ const { title, wide = false } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <meta name="generator" content={Astro.generator} />
-    <title>{title} — Tereza Horičková</title>
+    <title>{home ? 'Tereza Horičková' : `${title} — Tereza Horičková`}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,7 +30,7 @@ const { title, wide = false } = Astro.props;
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class:list={{ home }}>
     <Header />
     <main class:list={['container', { wide }]}>
       <slot />

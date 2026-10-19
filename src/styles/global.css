@@ -12,6 +12,24 @@ body {
   padding: 0;
 }
 
+/* Custom pixel-arrow cursor, used everywhere (links and buttons included).
+   Each square is 4px, so the arrow is 16px; the hotspot is the arrow tip in
+   the top-right corner. The second rule serves a crisp 2x image on
+   high-resolution screens. */
+* {
+  cursor: url('../assets/cursor/arrow.png') 15 1, auto;
+  cursor: image-set(url('../assets/cursor/arrow.png') 1x, url('../assets/cursor/arrow@2x.png') 2x) 15 1, auto;
+}
+
+/* Over anything clickable (and everything inside it, e.g. project photos)
+   the arrow flips horizontally, so visitors can see it's a link. The
+   hotspot moves to the mirrored tip in the top-left corner. */
+:is(a[href], button, [role='button'], summary, label),
+:is(a[href], button, [role='button'], summary, label) * {
+  cursor: url('../assets/cursor/arrow-link.png') 0 1, pointer;
+  cursor: image-set(url('../assets/cursor/arrow-link.png') 1x, url('../assets/cursor/arrow-link@2x.png') 2x) 0 1, pointer;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text);
@@ -61,6 +79,27 @@ main.container {
 main.container.wide {
   max-width: none;
   padding-inline: var(--space-5);
+}
+
+/* Front page: the header and footer take the green of the hero/closing
+   sections, the name in the header is hidden (the big title replaces it),
+   and the page sections run edge to edge. */
+body.home .header,
+body.home .footer {
+  background: var(--front-green);
+}
+
+body.home .logo {
+  visibility: hidden;
+}
+
+body.home .footer {
+  padding-top: var(--space-7);
+}
+
+body.home main.container {
+  max-width: none;
+  padding: 0;
 }
 
 /* In the full-width mosaic the first photo sits right under the header

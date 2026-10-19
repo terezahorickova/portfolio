@@ -47,12 +47,18 @@
   --pastel-rose: #f8dde3;
   --pastel-butter: #f6f0c9;
 
+  /* ---- Front page ---- */
+  --front-green: #f6ffd9;
+  --front-grey: #e2e2e2;
+
   /* ---- Layout ---- */
   --container-max: 1440px;
   --container-pad: var(--space-6);
   --grid-gap-x: 100px;
   --grid-gap-y: 100px;
   --nav-height: var(--space-9);
+  /* The header's height: its top and bottom padding plus the two-line logo. */
+  --header-h: calc(var(--space-5) * 2 + var(--text-3) * var(--line-tight) * 2);
 }
 
 /* Fluid down-scaling of the two largest steps only — the six-step
