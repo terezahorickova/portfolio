@@ -23,10 +23,16 @@ const gallery = detail?.gallery ?? [];
 const fullImages = gallery
   .map((image, index) => ({ ...image, index }))
   .filter((image) => image.col === 'full');
-const galleryCols = (['left', 'right'] as const).map((col) => ({
-  col,
-  items: gallery.map((image, index) => ({ ...image, index })).filter((image) => image.col === col),
-}));
+// A new aligned section starts at the first photo, and wherever a photo has `sync`.
+const sectionLists: ((typeof gallery)[number] & { index: number })[][] = [];
+gallery.forEach((image, index) => {
+  if (image.col === 'full') return;
+  if (sectionLists.length === 0 || image.sync) sectionLists.push([]);
+  sectionLists[sectionLists.length - 1].push({ ...image, index });
+});
+const sections = sectionLists.map((list) =>
+  (['left', 'right'] as const).map((col) => ({ col, items: list.filter((image) => image.col === col) })),
+);
 ---
 
 <BaseLayout title={project.title}>
@@ -86,18 +92,34 @@ const galleryCols = (['left', 'right'] as const).map((col) => ({
 
     {gallery.length > 0 && (
       <section class="gallery">
-        {galleryCols.map(({ col, items }) => (
-          <div class={`gallery-col gallery-col--${col}`}>
-            {items.map((image) => (
-              <Image
-                class="gallery-img"
-                style={`--size: ${image.size ?? 100}%; --i: ${image.index};`}
-                src={image.src}
-                alt={image.alt}
-                widths={[500, 900]}
-                sizes="(max-width: 780px) 100vw, 450px"
-                loading="lazy"
-              />
+        {sections.map((cols) => (
+          <div class="gallery-section">
+            {cols.map(({ col, items }) => (
+              <div class={`gallery-col gallery-col--${col}`}>
+                {items.map((image) =>
+                  image.animated ? (
+                    <img
+                      class="gallery-img"
+                      style={`--size: ${image.size ?? 100}%; --i: ${image.index};`}
+                      src={image.src.src}
+                      alt={image.alt}
+                      width={image.src.width}
+                      height={image.src.height}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <Image
+                      class="gallery-img"
+                      style={`--size: ${image.size ?? 100}%; --i: ${image.index};`}
+                      src={image.src}
+                      alt={image.alt}
+                      widths={[500, 900]}
+                      sizes="(max-width: 780px) 100vw, 450px"
+                      loading="lazy"
+                    />
+                  ),
+                )}
+              </div>
             ))}
           </div>
         ))}
@@ -222,15 +244,16 @@ const galleryCols = (['left', 'right'] as const).map((col) => ({
   }
 
   .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+  }
+
+  .gallery-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 100px;
-    row-gap: var(--space-7);
     align-items: start;
-  }
-
-  .gallery-img--full {
-    grid-column: 1 / -1;
   }
 
   .gallery-col {
@@ -273,7 +296,8 @@ const galleryCols = (['left', 'right'] as const).map((col) => ({
       grid-column: 1;
     }
 
-    .gallery {
+    .gallery,
+    .gallery-section {
       display: flex;
       flex-direction: column;
       gap: var(--grid-gap-y);

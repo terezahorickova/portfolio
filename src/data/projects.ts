@@ -29,8 +29,7 @@ import tarpSitting from '../assets/tarp-chair/sitting.jpg';
 import tarpSittingBlur from '../assets/tarp-chair/sitting-blur.jpg';
 import tarpTubes from '../assets/tarp-chair/tubes.jpg';
 import tarpWashing from '../assets/tarp-chair/washing.jpg';
-import tarpOutlineLounge from '../assets/tarp-chair/outline-lounge.jpg';
-import tarpOutlineChair from '../assets/tarp-chair/outline-chair.jpg';
+import tarpDrawings from '../assets/tarp-chair/drawings.webp';
 import jilemniceIntro from '../assets/jilemnice/intro.jpg';
 import jilemniceCyclist from '../assets/jilemnice/cyclist.jpg';
 import jilemniceSnow from '../assets/jilemnice/snow.jpg';
@@ -73,6 +72,10 @@ export interface GalleryImage {
   col: 'left' | 'right' | 'full';
   /** Width as a percentage of its column on desktop (default 100). */
   size?: number;
+  /** Starts a new aligned row: this photo and the next one in the other column begin at the same height. */
+  sync?: boolean;
+  /** Already-optimized animated image: shown as-is so it keeps moving. */
+  animated?: boolean;
 }
 
 /** Optional editorial layout for a project's detail page. */
@@ -294,10 +297,9 @@ export const projects: Project[] = [
       credits: ['Photography: Tereza Horičková'],
       gallery: [
         { src: tarpFolded, alt: 'The tarp chair folded flat against a concrete wall', col: 'left', size: 91 },
-        { src: tarpOutlineChair, alt: 'Line drawing of the tarp chair', col: 'right', size: 91 },
-        { src: tarpWashing, alt: 'Washing a used truck tarp in a bathtub', col: 'left', size: 91 },
+        { src: tarpDrawings, alt: 'Line drawings of the tarp chair as a chair and as a lounge chair', col: 'right', size: 91, animated: true },
+        { src: tarpWashing, alt: 'Washing a used truck tarp in a bathtub', col: 'left', size: 91, sync: true },
         { src: tarpSitting, alt: 'A person sitting in the tarp chair', col: 'right', size: 91 },
-        { src: tarpOutlineLounge, alt: 'Line drawing of the chair converted to a lounge chair', col: 'left', size: 91 },
         { src: tarpSittingBlur, alt: 'A person sitting down in the chair', col: 'right', size: 91 },
         { src: tarpBending, alt: 'Attaching the backrest to the chair frame', col: 'left', size: 91 },
         { src: tarpTubes, alt: 'Bent steel tubes and a sketch in the workshop', col: 'right', size: 91 },
