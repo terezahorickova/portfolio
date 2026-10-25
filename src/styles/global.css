@@ -97,6 +97,12 @@ body.home .footer {
   padding-top: var(--space-7);
 }
 
+/* The front page's content has the same width as the other pages' grids
+   (the container minus its side padding). */
+body.home {
+  --content-w: min(100% - 2 * var(--container-pad), var(--container-max) - 2 * var(--container-pad));
+}
+
 body.home main.container {
   max-width: none;
   padding: 0;

@@ -73,7 +73,7 @@ const values = [
       </div>
     </div>
     <div class="about-photo">
-      <Image src={portrait} alt="Portrait of Tereza Horičková" widths={[400, 700, 1000]} sizes="(max-width: 780px) 100vw, 26vw" loading="eager" />
+      <Image src={portrait} alt="Portrait of Tereza Horičková" widths={[400, 700, 1000]} sizes="(max-width: 780px) 100vw, 38vw" loading="eager" />
     </div>
   </section>
 
@@ -84,7 +84,7 @@ const values = [
           <span>{item.label}</span>
           <img class="chevron" src={chevron.src} width={chevron.width} height={chevron.height} alt="" />
         </span>
-        <Image class="card-photo" src={item.photo} alt={item.alt} widths={[400, 700, 1000]} sizes="(max-width: 780px) 100vw, 21vw" />
+        <Image class="card-photo" src={item.photo} alt={item.alt} widths={[400, 700, 1000]} sizes="(max-width: 780px) 100vw, 31vw" />
       </a>
     ))}
   </section>
@@ -111,7 +111,7 @@ const values = [
             <span>{item.label}</span>
             <img class="chevron" src={chevron.src} width={chevron.width} height={chevron.height} alt="" />
           </span>
-          <Image class="card-photo" src={item.photo} alt={item.alt} widths={[400, 700, 1000]} sizes="(max-width: 780px) 100vw, 21vw" />
+          <Image class="card-photo" src={item.photo} alt={item.alt} widths={[400, 700, 1000]} sizes="(max-width: 780px) 100vw, 31vw" />
         </a>
       ))}
     </div>
@@ -335,7 +335,7 @@ const values = [
 <style>
   /* Everything is sized in vw (and capped) so the page scales like the mockup. */
   .wrap {
-    width: min(64vw, 1100px);
+    width: var(--content-w);
     margin-inline: auto;
   }
 
@@ -410,8 +410,8 @@ const values = [
   .hero-text {
     position: absolute;
     top: 13vw;
-    right: calc((100% - min(64vw, 1100px)) / 2);
-    width: calc(min(64vw, 1100px) * 0.4);
+    right: calc((100% - var(--content-w)) / 2);
+    width: calc(var(--content-w) * 0.4);
     font-size: clamp(15px, 1.6vw, 24px);
     line-height: 1.45;
   }
@@ -555,7 +555,8 @@ const values = [
   .cta {
     margin-top: 8.7vw;
     padding: 9vw 24px 0;
-    background: var(--front-green);
+    /* White fades into the green over the first stretch, like under the hero. */
+    background: linear-gradient(to bottom, var(--color-bg), var(--front-green) clamp(32px, 4vw, 90px));
     text-align: center;
   }
 
@@ -575,7 +576,7 @@ const values = [
   @media (max-width: 780px) {
     .wrap {
       width: auto;
-      margin-inline: var(--space-5);
+      margin-inline: var(--container-pad);
     }
 
     .hero-inner {
