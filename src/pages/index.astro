@@ -40,6 +40,10 @@ const values = [
 ---
 
 <BaseLayout title="Home" home>
+  <!-- Hides the headline (until the build animation has played) before the page first paints. -->
+  <script is:inline>
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('title-anim');
+  </script>
   <section class="hero">
     <div class="hero-inner">
       <h1 class="hero-title">
@@ -122,6 +126,204 @@ const values = [
   </section>
 </BaseLayout>
 
+<script>
+  /*
+    Headline build animation. The display font is made of square pixels, each
+    exactly 1/13 of the font size, so the name is turned into a grid of cells.
+    Every cell then falls from the top of the window, one grid step at a time,
+    like a Tetris piece that speeds up as it falls, until the name is built
+    from the bottom up. The real text takes over once everything has landed.
+  */
+  const root = document.documentElement;
+  const title = document.querySelector<HTMLElement>('.hero-title');
+
+  const reveal = () => root.classList.add('title-done');
+
+  type Cell = { tx: number; ty: number; dx: number; dy: number; start: number; dur: number };
+
+  /*
+    The squares only match the real text exactly when one font pixel is a whole
+    number of screen pixels, and when the text starts on a whole screen pixel.
+    So the headline size is rounded to the nearest such size (a few percent off
+    from the fluid size), and the title is nudged onto the pixel grid.
+  */
+  function snapTitle(titleEl: HTMLElement) {
+    const dpr = window.devicePixelRatio || 1;
+    const spans = [...titleEl.querySelectorAll<HTMLElement>('span')];
+    titleEl.style.cssText = '';
+    const natural = parseFloat(getComputedStyle(titleEl).fontSize);
+    const fits = () => spans.every((el) => el.getBoundingClientRect().width <= titleEl.clientWidth * 1.02);
+    let k = Math.max(1, Math.round((natural * dpr) / 13));
+    const apply = () => {
+      const size = (13 * k) / dpr;
+      titleEl.style.fontSize = size + 'px';
+      titleEl.style.lineHeight = Math.round(1.05 * size * dpr) / dpr + 'px';
+    };
+    apply();
+    while (k > 1 && !fits()) {
+      k--;
+      apply();
+    }
+    // Nudge the first baseline and the left edge onto whole screen pixels.
+    titleEl.style.position = 'relative';
+    const probe = document.createElement('i');
+    probe.style.cssText = 'display:inline-block;width:0;height:0';
+    spans[0].append(probe);
+    const baseline = probe.getBoundingClientRect().bottom;
+    probe.remove();
+    const left = spans[0].getBoundingClientRect().left;
+    titleEl.style.left = Math.round(left * dpr) / dpr - left + 'px';
+    titleEl.style.top = Math.round(baseline * dpr) / dpr - baseline + 'px';
+  }
+
+  async function build(titleEl: HTMLElement) {
+    await document.fonts.load("100px 'Jacquarda Bastarda 9'", 'Tereza Horičková');
+    snapTitle(titleEl);
+    const lines = [...titleEl.querySelectorAll<HTMLElement>('span')];
+    const style = getComputedStyle(titleEl);
+    const fs = parseFloat(style.fontSize);
+    const cell = fs / 13;
+    const font = `${style.fontWeight} ${fs}px ${style.fontFamily}`;
+    // The window without its scrollbar, so the canvas is drawn at exactly 1:1.
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+    const startScroll = window.scrollY;
+
+    // 1. Read the pixels of every letter into grid cells (viewport coordinates).
+    // Each letter is placed where the browser itself puts it, so the squares
+    // line up with the real text that replaces them.
+    const targets: { x: number; y: number }[] = [];
+    const sample = document.createElement('canvas').getContext('2d', { willReadFrequently: true })!;
+    const range = document.createRange();
+    const pad = 2; // spare cells around a letter
+    for (const line of lines) {
+      const node = line.firstChild;
+      if (!node || node.nodeType !== Node.TEXT_NODE) continue;
+      const probe = document.createElement('i');
+      probe.style.cssText = 'display:inline-block;width:0;height:0';
+      line.append(probe);
+      const baseline = probe.getBoundingClientRect().bottom;
+      probe.remove();
+
+      const text = node.textContent ?? '';
+      for (let k = 0; k < text.length; k++) {
+        if (text[k].trim() === '') continue;
+        range.setStart(node, k);
+        range.setEnd(node, k + 1);
+        const box = range.getBoundingClientRect();
+        sample.font = font;
+        const m = sample.measureText(text[k]);
+        const up = Math.ceil(m.fontBoundingBoxAscent / cell) + 1;
+        const down = Math.ceil(m.fontBoundingBoxDescent / cell) + 1;
+        const cols = Math.ceil(m.width / cell) + pad * 2;
+        sample.canvas.width = Math.ceil(cols * cell);
+        sample.canvas.height = Math.ceil((up + down) * cell);
+        sample.font = font;
+        sample.fillText(text[k], pad * cell, up * cell);
+        const data = sample.getImageData(0, 0, sample.canvas.width, sample.canvas.height).data;
+        for (let j = 0; j < up + down; j++) {
+          for (let i = 0; i < cols; i++) {
+            const px = Math.floor((i + 0.5) * cell);
+            const py = Math.floor((j + 0.5) * cell);
+            if (px < sample.canvas.width && data[(py * sample.canvas.width + px) * 4 + 3] > 128) {
+              targets.push({ x: box.left + (i - pad) * cell, y: baseline + (j - up) * cell });
+            }
+          }
+        }
+      }
+    }
+    if (!targets.length) return reveal();
+
+    // 2. Tetris: every cell drops straight down from above the window,
+    // speeding up as it falls, one grid step at a time. The name builds from the bottom
+    // up, and within a column the lower cells land first, so a falling cell
+    // never passes through one that has already landed.
+    const gravity = 90; // grid steps per second squared (higher = faster fall)
+    const spread = 1.5; // seconds between the first and the last landing
+    const top = Math.min(...targets.map((t) => t.y));
+    const bottom = Math.max(...targets.map((t) => t.y));
+    const columns = new Map<number, { x: number; y: number }[]>();
+    for (const t of targets) {
+      const key = Math.round(t.x);
+      if (!columns.has(key)) columns.set(key, []);
+      columns.get(key)!.push(t);
+    }
+    const cells: Cell[] = [];
+    for (const members of columns.values()) {
+      members.sort((a, b) => b.y - a.y);
+      const times = members
+        .map((t) => 0.4 + ((bottom - t.y) / (bottom - top || 1)) * spread + Math.random() * 0.35)
+        .sort((a, b) => a - b);
+      members.forEach((t, k) => {
+        const steps = Math.ceil((t.y + cell) / cell);
+        const dur = Math.sqrt(steps / gravity);
+        cells.push({ tx: t.x, ty: t.y, dx: 0, dy: -steps * cell, start: times[k] - dur, dur });
+      });
+    }
+    const first = Math.min(...cells.map((c) => c.start));
+    for (const c of cells) c.start -= first;
+    const end = Math.max(...cells.map((c) => c.start + c.dur));
+
+    // 3. Draw it on a canvas laid over the whole window.
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = `position:fixed;top:0;left:0;width:${vw}px;height:${vh}px;z-index:100;pointer-events:none`;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(vw * dpr);
+    canvas.height = Math.round(vh * dpr);
+    document.body.append(canvas);
+    const ctx = canvas.getContext('2d')!;
+    ctx.scale(dpr, dpr);
+    ctx.fillStyle = getComputedStyle(document.body).color;
+
+    let t0 = 0;
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      reveal();
+      canvas.remove();
+      window.removeEventListener('resize', finish);
+    };
+    window.addEventListener('resize', finish);
+
+    const frame = (now: number) => {
+      if (done) return;
+      t0 ||= now;
+      const t = (now - t0) / 1000;
+      const scrolled = startScroll - window.scrollY;
+      ctx.clearRect(0, 0, vw, vh);
+      for (const c of cells) {
+        const p = Math.min(1, Math.max(0, (t - c.start) / c.dur));
+        if (p === 0) continue;
+        // Move in whole grid steps so the cells hop from square to square.
+        const remaining = Math.ceil((1 - p * p) * ((Math.abs(c.dx) + Math.abs(c.dy)) / cell)) * cell;
+        const x = c.tx + Math.sign(c.dx) * remaining;
+        const y = c.ty + Math.sign(c.dy) * remaining + scrolled;
+        const x0 = Math.round(x * dpr) / dpr;
+        const y0 = Math.round(y * dpr) / dpr;
+        ctx.fillRect(x0, y0, Math.round((x + cell) * dpr) / dpr - x0, Math.round((y + cell) * dpr) / dpr - y0);
+      }
+      if (t < end + 0.05) requestAnimationFrame(frame);
+      else finish();
+    };
+    requestAnimationFrame(frame);
+  }
+
+  if (title && root.classList.contains('title-anim')) {
+    let pending = 0;
+    window.addEventListener('resize', () => {
+      cancelAnimationFrame(pending);
+      pending = requestAnimationFrame(() => snapTitle(title));
+    });
+    build(title).catch((err) => {
+      console.error('Title animation failed', err);
+      reveal();
+    });
+  } else {
+    reveal();
+  }
+</script>
+
 <style>
   /* Everything is sized in vw (and capped) so the page scales like the mockup. */
   .wrap {
@@ -157,6 +359,20 @@ const values = [
     font-weight: var(--fw-regular);
     font-size: clamp(40px, 5vw, 84px);
     line-height: 1.05;
+  }
+
+  /* While the build animation plays the real text is invisible (the canvas
+     draws the squares). The CSS animation is a failsafe in case the script
+     never finishes. */
+  :global(html.title-anim:not(.title-done)) .hero-title {
+    color: transparent;
+    animation: title-failsafe 0s 6s forwards;
+  }
+
+  @keyframes title-failsafe {
+    to {
+      color: var(--color-text);
+    }
   }
 
   .hero-text {
