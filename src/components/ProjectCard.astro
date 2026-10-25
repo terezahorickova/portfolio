@@ -13,6 +13,7 @@ const cardColor = project.color.startsWith('#') ? project.color : `var(--${proje
 
 <a
   class="card"
+  data-tags={project.tags?.join(' ')}
   href={withBase(`/work/${project.slug}/`)}
   aria-label={`${project.title} — ${project.description}`}
   style={`--card-color: ${cardColor}; --card-aspect: ${project.aspect};`}

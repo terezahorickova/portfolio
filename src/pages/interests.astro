@@ -1,11 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectGrid from '../components/ProjectGrid.astro';
-import { getBySection } from '../data/projects';
+import { getBySection, interestFilters } from '../data/projects';
 
 const projects = getBySection('interests');
 ---
 
 <BaseLayout title="Interests">
-  <ProjectGrid projects={projects} intro="Small, ongoing curiosities alongside the studio work." />
+  <ProjectGrid
+    projects={projects}
+    intro="A collection of things made with my hands, moments gathered along the way, and side projects that keep me inspired."
+    filters={[...interestFilters]}
+  />
 </BaseLayout>

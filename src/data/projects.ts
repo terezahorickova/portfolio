@@ -75,6 +75,16 @@ import rheaBaby from '../assets/rhea/baby.jpg';
 
 export type Section = 'product' | 'research' | 'graphics' | 'interests';
 
+/** Filters on the Interests page. A project can belong to several. */
+export const interestFilters = [
+  { key: 'photography', label: 'Photography' },
+  { key: 'workshops', label: 'Workshops' },
+  { key: 'land-art', label: 'Land art' },
+  { key: 'diy', label: 'DIY' },
+] as const;
+
+export type InterestTag = (typeof interestFilters)[number]['key'];
+
 export interface GalleryImage {
   src: ImageMetadata;
   alt: string;
@@ -123,6 +133,8 @@ export interface Project {
   color: string; // CSS custom property name, e.g. 'pastel-blush'
   aspect: string; // CSS aspect-ratio value
   cover?: ImageMetadata;
+  /** Interests only: which filters this project shows up under. */
+  tags?: InterestTag[];
   body?: string; // longer write-up shown on the project detail page
   detail?: ProjectDetail;
 }
@@ -486,6 +498,7 @@ export const projects: Project[] = [
   {
     slug: 'ceramics-experiments',
     section: 'interests',
+    tags: ['diy', 'workshops'],
     title: 'Ceramics experiments',
     description: 'Small hand-built vessels made between larger projects.',
     year: '2023',
@@ -495,6 +508,7 @@ export const projects: Project[] = [
   {
     slug: 'embroidery-sketchbook',
     section: 'interests',
+    tags: ['diy'],
     title: 'Embroidery sketchbook',
     description: 'Thread studies used as colour and pattern references.',
     year: '2024',
@@ -504,6 +518,7 @@ export const projects: Project[] = [
   {
     slug: 'foraging-notes',
     section: 'interests',
+    tags: ['land-art'],
     title: 'Foraging notes',
     description: 'Seasonal notes on plants and materials found near Prague.',
     year: '2024',
@@ -513,6 +528,7 @@ export const projects: Project[] = [
   {
     slug: 'film-photography',
     section: 'interests',
+    tags: ['photography'],
     title: 'Film photography',
     description: 'A running archive of analogue photographs from travel and studio life.',
     year: '2025',
