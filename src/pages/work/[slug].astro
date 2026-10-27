@@ -16,23 +16,30 @@ export function getStaticPaths() {
 const { project } = Astro.props;
 const cardColor = project.color.startsWith('#') ? project.color : `var(--${project.color})`;
 const detail = project.detail;
-const subtitle = [project.description, project.year].filter(Boolean).join(', ');
-const hero = detail?.hero ?? project.cover;
+const subtitle = [project.subtitle ?? project.description, project.year].filter(Boolean).join(', ');
+const hero = detail?.hero === null ? undefined : (detail?.hero ?? project.cover);
 const bodyParagraphs = project.body ? project.body.split(/\n\s*\n/) : [];
 const gallery = detail?.gallery ?? [];
-const fullImages = gallery
-  .map((image, index) => ({ ...image, index }))
-  .filter((image) => image.col === 'full');
-// A new aligned section starts at the first photo, and wherever a photo has `sync`.
-const sectionLists: ((typeof gallery)[number] & { index: number })[][] = [];
+// The gallery is laid out in order. Full-width photos stand alone; the other
+// photos form aligned sections, and a new section starts at the first photo
+// and wherever a photo has `sync`.
+type Item = (typeof gallery)[number] & { index: number };
+const blocks: ({ kind: 'full'; image: Item } | { kind: 'section'; list: Item[] })[] = [];
+let current: Item[] | null = null;
 gallery.forEach((image, index) => {
-  if (image.col === 'full') return;
-  if (sectionLists.length === 0 || image.sync) sectionLists.push([]);
-  sectionLists[sectionLists.length - 1].push({ ...image, index });
+  const item = { ...image, index };
+  if (image.col === 'full') {
+    current = null;
+    blocks.push({ kind: 'full', image: item });
+    return;
+  }
+  if (!current || image.sync) {
+    current = [];
+    blocks.push({ kind: 'section', list: current });
+  }
+  current.push(item);
 });
-const sections = sectionLists.map((list) =>
-  (['left', 'right'] as const).map((col) => ({ col, items: list.filter((image) => image.col === col) })),
-);
+const steps = detail?.steps;
 const mosaic = detail?.mosaic;
 ---
 
@@ -125,9 +132,20 @@ const mosaic = detail?.mosaic;
 
     {gallery.length > 0 && (
       <section class="gallery">
-        {sections.map((cols) => (
+        {blocks.map((block) =>
+          block.kind === 'full' ? (
+            <Image
+              class="gallery-img gallery-img--full"
+              style={`--size: ${block.image.size ?? 100}%; --i: ${block.image.index};`}
+              src={block.image.src}
+              alt={block.image.alt}
+              widths={[900, 1600, 2400]}
+              sizes="(max-width: 1440px) 100vw, 1376px"
+              loading="lazy"
+            />
+          ) : (
           <div class="gallery-section">
-            {cols.map(({ col, items }) => (
+            {(['left', 'right'] as const).map((col) => ({ col, items: block.list.filter((image) => image.col === col) })).map(({ col, items }) => (
               <div class={`gallery-col gallery-col--${col}`}>
                 {items.map((image) =>
                   image.animated ? (
@@ -155,18 +173,22 @@ const mosaic = detail?.mosaic;
               </div>
             ))}
           </div>
-        ))}
-        {fullImages.map((image) => (
-          <Image
-            class="gallery-img gallery-img--full"
-            style={`--size: ${image.size ?? 100}%; --i: ${image.index};`}
-            src={image.src}
-            alt={image.alt}
-            widths={[900, 1600, 2400]}
-            sizes="(max-width: 1440px) 100vw, 1376px"
-            loading="lazy"
-          />
-        ))}
+          ),
+        )}
+      </section>
+    )}
+
+    {steps && (
+      <section class="steps">
+        <h2>{steps.title}</h2>
+        <ol class="steps-list">
+          {steps.items.map((step, index) => (
+            <li class="step">
+              <Image src={step.src} alt={step.alt} widths={[300, 500, 700]} sizes="(max-width: 780px) 50vw, 270px" loading="lazy" />
+              <p><span class="step-number">{index + 1}.</span> {step.caption}</p>
+            </li>
+          ))}
+        </ol>
       </section>
     )}
   </article>
@@ -303,10 +325,12 @@ const mosaic = detail?.mosaic;
     gap: var(--space-3);
   }
 
+  /* The display font's capitals are hard to read, so project names are set in lowercase. */
   h1 {
     font-family: var(--font-display);
     font-weight: var(--fw-regular);
     font-size: var(--text-5);
+    text-transform: lowercase;
   }
 
   .subtitle {
@@ -391,6 +415,12 @@ const mosaic = detail?.mosaic;
     align-items: start;
   }
 
+  /* A full-width photo followed by a row of photos gets the same 100px
+     breathing room as between the page's main sections. */
+  .gallery-img--full + .gallery-section {
+    margin-top: var(--grid-gap-y);
+  }
+
   .gallery-col {
     display: flex;
     flex-direction: column;
@@ -411,7 +441,54 @@ const mosaic = detail?.mosaic;
     height: auto;
   }
 
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+  }
+
+  .steps h2 {
+    font-weight: var(--fw-regular);
+    font-size: var(--text-4);
+    line-height: var(--line-tight);
+  }
+
+  .steps-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-4);
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .step :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  .step p {
+    font-size: var(--text-1);
+    line-height: var(--line-normal);
+    color: var(--color-muted);
+  }
+
+  .step-number {
+    display: block;
+  }
+
   @media (max-width: 780px) {
+    .steps-list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-5) var(--space-3);
+    }
+
     .intro,
     .columns {
       grid-template-columns: 1fr;

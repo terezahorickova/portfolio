@@ -72,6 +72,15 @@ import rheaLegs from '../assets/rhea/legs.jpg';
 import rheaSwing from '../assets/rhea/swing.jpg';
 import rheaSigns from '../assets/rhea/signs.jpg';
 import rheaBaby from '../assets/rhea/baby.jpg';
+import spojHero from '../assets/spoj/hero.webp';
+import spojHand from '../assets/spoj/hand.jpg';
+import spojWardrobe from '../assets/spoj/wardrobe.jpg';
+import spojMoodboard from '../assets/spoj/moodboard.jpg';
+import spojStep1 from '../assets/spoj/step-1.jpg';
+import spojStep2 from '../assets/spoj/step-2.jpg';
+import spojStep3 from '../assets/spoj/step-3.jpg';
+import spojStep4 from '../assets/spoj/step-4.jpg';
+import spojStep5 from '../assets/spoj/step-5.jpg';
 
 export type Section = 'product' | 'research' | 'graphics' | 'interests';
 
@@ -114,14 +123,16 @@ export interface ProjectDetail {
   mosaic?: MosaicTile[];
   /** Portrait photo shown beside the intro text. */
   intro?: ImageMetadata;
-  /** Big photo under the intro; defaults to the project's `cover`. */
-  hero?: ImageMetadata;
+  /** Big photo under the intro; defaults to the project's `cover`. Use `null` to show a "coming soon" box instead. */
+  hero?: ImageMetadata | null;
   /** Hero is an already-optimized animated image: skip Astro's image processing so it keeps moving. */
   heroAnimated?: boolean;
   credits?: string[];
   /** Two text columns (each a list of paragraphs) shown under the hero photo. */
   columns?: [string[], string[]];
   gallery: GalleryImage[];
+  /** A titled row of captioned photos (e.g. the steps of a method) shown after the gallery. */
+  steps?: { title: string; items: { src: ImageMetadata; alt: string; caption: string }[] };
 }
 
 export interface Project {
@@ -129,6 +140,8 @@ export interface Project {
   section: Section;
   title: string;
   description: string;
+  /** Overrides the description on the project page's subtitle (the card keeps the description). */
+  subtitle?: string;
   year?: string;
   color: string; // CSS custom property name, e.g. 'pastel-blush'
   aspect: string; // CSS aspect-ratio value
@@ -416,9 +429,31 @@ export const projects: Project[] = [
     title: 'Spoj',
     description: 'Material experimentation with bioplastic',
     year: '2025',
+    subtitle: 'Adhesive strength of bioplastic',
     color: 'pastel-butter',
     aspect: '3 / 4',
     cover: resinAndPigmentFrameCover,
+    body: 'SPOJ responds to the needs of students and frequent movers looking for lightweight, functional furniture. The initial concept aimed to elevate an ordinary clothes rack into a wardrobe—creating a semi-transparent enclosure that protects garments from dust, keeps the interior visually light, and is easy to clean. Seeking a more practical, washable alternative to the fabric covers typically used in temporary wardrobes, I began exploring bioplastics and their potential in interior spaces.\n\nThrough material experimentation, I developed a method to join the bioplastic panels directly to the frame without any additional fasteners or hardware. When cast into a mold, the bioplastic forms a thin film that hardens as it dries, creating a strong bond with the mold itself. I decided to turn this behavior into a core structural feature: the wardrobe’s cladding is held in place purely by the adhesive properties of the curing bioplastic, eliminating the need for conventional mechanical fixings.',
+    detail: {
+      intro: resinAndPigmentFrameCover,
+      hero: spojHero,
+      heroAnimated: true,
+      gallery: [
+        { src: spojMoodboard, alt: 'Moodboard of translucent wardrobes, screens and orange bioplastic samples', col: 'full' },
+        { src: spojHand, alt: 'A hand pressed against a bioplastic panel in a wooden frame', col: 'left', size: 87, sync: true },
+        { src: spojWardrobe, alt: 'Render of the SPOJ sideboard with translucent bioplastic doors and a tulip on top', col: 'right', size: 87 },
+      ],
+      steps: {
+        title: 'Method',
+        items: [
+          { src: spojStep1, alt: 'Wooden frames laid out on a dark board', caption: 'Preparation of molds in the form of frames' },
+          { src: spojStep2, alt: 'Dried orange peels and orange powder on a plate', caption: 'The dried orange peels need to be ground into a powder.' },
+          { src: spojStep3, alt: 'A pot of bioplastic mixture on a stove', caption: 'Preparation of the bioplastic mixture (specifically, in my case: orange powder, glycerol, gelatin, and water)' },
+          { src: spojStep4, alt: 'Bioplastic cast into molds', caption: 'Casting into molds' },
+          { src: spojStep5, alt: 'A bioplastic sheet drying in a window with a hand behind it', caption: 'In a home setting, drying takes roughly 5 days.' },
+        ],
+      },
+    },
   },
   // ---- Graphics ----
   {
