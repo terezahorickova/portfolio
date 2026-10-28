@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { projects } from '../../data/projects';
+import chevron from '../../assets/front/chevron.png';
 
 export function getStaticPaths() {
   return projects.map((project) => ({
@@ -41,12 +42,15 @@ gallery.forEach((image, index) => {
 });
 const steps = detail?.steps;
 const mosaic = detail?.mosaic;
+// An optional empty row (the breathing space under the text) between the first and the following tiles.
+const spacer = detail?.mosaicSpacer;
+const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(--unit)) calc(var(--unit) * ${spacer.size});` : '';
 ---
 
 <BaseLayout title={project.title} wide={!!mosaic}>
   {mosaic ? (
     <article class="mosaic">
-      <div class="mosaic-grid">
+      <div class="mosaic-grid" style={mosaicRows}>
         <div class="mosaic-text">
           <h1>{project.title}</h1>
           <p class="subtitle">{subtitle}</p>
@@ -59,6 +63,9 @@ const mosaic = detail?.mosaic;
             </p>
           )}
         </div>
+        {detail?.scrollCue && spacer && (
+          <img class="mosaic-cue" style={`--r: ${spacer.row};`} src={chevron.src} width={chevron.width} height={chevron.height} alt="" />
+        )}
         {mosaic.map((tile, index) => (
           <div
             class={`mosaic-tile mosaic-tile--${tile.shape}`}
@@ -67,8 +74,8 @@ const mosaic = detail?.mosaic;
             <Image
               src={tile.src}
               alt={tile.alt}
-              widths={[500, 800, 1200, 1600]}
-              sizes="(max-width: 780px) 100vw, 33vw"
+              widths={tile.shape === 'wide' ? [900, 1400, 2000, 2400] : [500, 800, 1200, 1600]}
+              sizes={tile.shape === 'wide' ? '(max-width: 780px) 100vw, 67vw' : '(max-width: 780px) 100vw, 33vw'}
               loading={index < 3 ? 'eager' : 'lazy'}
             />
           </div>
@@ -211,7 +218,19 @@ const mosaic = detail?.mosaic;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     column-gap: var(--gap);
-    grid-auto-rows: calc(var(--cell) * 2 / 3);
+    --unit: calc(var(--cell) * 2 / 3);
+    grid-auto-rows: var(--unit);
+  }
+
+  /* A small pixel arrow pointing down, in the spacer row under the text. */
+  .mosaic-cue {
+    grid-column: 1;
+    grid-row: var(--r);
+    align-self: center;
+    width: 12px;
+    height: auto;
+    transform: rotate(90deg);
+    image-rendering: pixelated;
   }
 
   /* Text fills exactly one column (the same width as the photo columns),
@@ -256,6 +275,12 @@ const mosaic = detail?.mosaic;
     grid-row: var(--r) / span 1;
   }
 
+  /* Two columns wide, two rows tall: 3:2 like a landscape photo, just larger. */
+  .mosaic-tile--wide {
+    grid-column: var(--c) / span 2;
+    grid-row: var(--r) / span 2;
+  }
+
   .mosaic-tile :global(img) {
     display: block;
     width: 100%;
@@ -294,8 +319,13 @@ const mosaic = detail?.mosaic;
       aspect-ratio: 3 / 4;
     }
 
-    .mosaic-tile--landscape {
+    .mosaic-tile--landscape,
+    .mosaic-tile--wide {
       aspect-ratio: 3 / 2;
+    }
+
+    .mosaic-cue {
+      display: none;
     }
   }
 

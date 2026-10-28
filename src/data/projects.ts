@@ -63,7 +63,8 @@ import kockiBox from '../assets/kocki/box.jpg';
 import kockiPlay1 from '../assets/kocki/play-1.jpg';
 import kockiPlay2 from '../assets/kocki/play-2.jpg';
 import kockiPlay3 from '../assets/kocki/play-3.jpg';
-import rheaIntro from '../assets/rhea/intro.jpg';
+import rheaHero from '../assets/rhea/hero.jpg';
+import rheaWoman from '../assets/rhea/woman.jpg';
 import rheaStraw from '../assets/rhea/straw.jpg';
 import rheaHands from '../assets/rhea/hands.jpg';
 import rheaBelt from '../assets/rhea/belt.jpg';
@@ -107,20 +108,24 @@ export interface GalleryImage {
   animated?: boolean;
 }
 
-/** A photo in the 3-column mosaic layout. Portrait = 3:4 (2 grid rows), landscape = 3:2 (1 row). */
+/** A photo in the 3-column mosaic layout. Portrait = 3:4 (2 grid rows), landscape = 3:2 (1 row), wide = 3:2 across two columns (2 rows). */
 export interface MosaicTile {
   src: ImageMetadata;
   alt: string;
   col: 1 | 2 | 3;
   /** 1-based grid row where the tile starts; rows are half a portrait photo tall. */
   row: number;
-  shape: 'portrait' | 'landscape';
+  shape: 'portrait' | 'landscape' | 'wide';
 }
 
 /** Optional editorial layout for a project's detail page. */
 export interface ProjectDetail {
   /** If set, the page uses the full-width 3-column mosaic instead of the standard layout. */
   mosaic?: MosaicTile[];
+  /** Mosaic only: an empty row of this many grid rows' height, inserted as row number `row` (a breathing space; tiles after it use the shifted row numbers). */
+  mosaicSpacer?: { row: number; size: number };
+  /** Mosaic only: a small downward arrow in the spacer row, under the text. */
+  scrollCue?: boolean;
   /** Portrait photo shown beside the intro text. */
   intro?: ImageMetadata;
   /** Big photo under the intro; defaults to the project's `cover`. Use `null` to show a "coming soon" box instead. */
@@ -273,27 +278,20 @@ export const projects: Project[] = [
     cover: wickerCradleCover,
     body: 'The wicker cradle Rhea was created as part of the Bohemian Perfection project, a collaboration between students and traditional craftspeople. As part of this initiative, I focused on the craft of basketry and designed a baby cradle for infants up to 8 months of age. My goal was to modernize the craft and traditional production of wicker baskets, maximizing the use of natural materials while giving them a contemporary design. I was personally involved in the fabrication process, spending many days in the workshop with master basket weaver Mr. Král to gain invaluable hands-on experience in this beautiful craft.',
     detail: {
-      intro: rheaIntro,
       credits: ['Collaboration: Petr Král', 'Photography: Tereza Horičková'],
-      columns: [
-        [
-          'When I was little, my parents would put me down to sleep in the fresh air in good weather, in a basket hung on the terrace, rocking me to sleep as I lay there. This motion is pleasantly soothing for small children. I tried to make use of these memories: my cradle can be rocked, can stand firmly on the floor, and can also be hung from a ceiling or a terrace. This is possible thanks to a simple anti-rocking brake in the form of a wooden log, and thanks to leather straps that can be attached not only to the frame but also to ropes, so the cradle can be suspended in the space.',
-          'I spent several days in the workshop of basket weaver Petr Král, helping him weave a basket, or rather trying to.',
-        ],
-        [
-          'Weaving in the willow rods is physically demanding work that requires strong hands, and after just a few rods mine always started to ache. Mr. Král, however, managed it with ease, and the basket was finished in 3 days.',
-          'Besides the skilled craftsmen and myself, I involved my whole family in the production. My father and I found old leather from a gym mat, my uncle brought plywood, my grandmother linen sheets: simply “whatever the house could give”. It seems to me that even this process continues traditions of the past. When a woman was expecting a baby, the whole family pooled together whatever it had, so that the new arrival would feel good from the very first moment.',
-        ],
-      ],
-      gallery: [
-        { src: rheaStraw, alt: 'Bundles of willow rods in the workshop', col: 'left', size: 82 },
-        { src: rheaLegs, alt: 'The cradle’s rocking runners on a tiled floor', col: 'right' },
-        { src: rheaHands, alt: 'Fastening the canvas lining inside the cradle', col: 'left' },
-        { src: rheaSigns, alt: 'Craft certification signs in the basket weaver’s workshop', col: 'right' },
-        { src: rheaBelt, alt: 'Leather strap and woven rim detail', col: 'left' },
-        { src: rheaSwing, alt: 'Rhea hung as a swing in the exhibition', col: 'right', size: 75 },
-        { src: rheaRocker, alt: 'Steel frame joined to a wooden runner', col: 'left' },
-        { src: rheaBaby, alt: 'A baby lying in the cradle', col: 'right', size: 75 },
+      scrollCue: true,
+      mosaicSpacer: { row: 3, size: 0.46 },
+      mosaic: [
+        { src: rheaHero, alt: 'The Rhea wicker cradle on a rocking frame in a concrete hall', col: 2, row: 1, shape: 'wide' },
+        { src: rheaHands, alt: 'Fastening the canvas lining inside the cradle', col: 2, row: 4, shape: 'landscape' },
+        { src: rheaStraw, alt: 'Bundles of willow rods in the workshop', col: 1, row: 5, shape: 'portrait' },
+        { src: rheaLegs, alt: 'A person rocking the cradle with their foot on the wooden runner', col: 3, row: 5, shape: 'landscape' },
+        { src: rheaBelt, alt: 'Leather strap and woven rim detail', col: 2, row: 7, shape: 'landscape' },
+        { src: rheaWoman, alt: 'A woman leaning over the cradle in a concrete hall', col: 3, row: 7, shape: 'portrait' },
+        { src: rheaRocker, alt: 'The cradle’s rocking runner on a tiled floor', col: 1, row: 8, shape: 'landscape' },
+        { src: rheaBaby, alt: 'A baby lying in the cradle', col: 2, row: 9, shape: 'portrait' },
+        { src: rheaSwing, alt: 'Rhea hung as a swing in the exhibition', col: 1, row: 11, shape: 'portrait' },
+        { src: rheaSigns, alt: 'Craft certification signs in the basket weaver’s workshop', col: 3, row: 11, shape: 'landscape' },
       ],
     },
   },
