@@ -64,6 +64,7 @@ import kockiPlay1 from '../assets/kocki/play-1.jpg';
 import kockiPlay2 from '../assets/kocki/play-2.jpg';
 import kockiPlay3 from '../assets/kocki/play-3.jpg';
 import rheaHero from '../assets/rhea/hero.jpg';
+import rheaHeroSquare from '../assets/rhea/hero-square.jpg';
 import rheaWoman from '../assets/rhea/woman.jpg';
 import rheaStraw from '../assets/rhea/straw.jpg';
 import rheaHands from '../assets/rhea/hands.jpg';
@@ -116,6 +117,8 @@ export interface MosaicTile {
   /** 1-based grid row where the tile starts; rows are half a portrait photo tall. */
   row: number;
   shape: 'portrait' | 'landscape' | 'wide';
+  /** A different crop of the photo used on phones (below 780px wide), e.g. a square one. */
+  phoneSrc?: ImageMetadata;
 }
 
 /** Optional editorial layout for a project's detail page. */
@@ -282,7 +285,7 @@ export const projects: Project[] = [
       centerFirstScreen: true,
       mosaicSpacer: { row: 3, size: 0.46 },
       mosaic: [
-        { src: rheaHero, alt: 'The Rhea wicker cradle on a rocking frame in a concrete hall', col: 2, row: 1, shape: 'wide' },
+        { src: rheaHero, alt: 'The Rhea wicker cradle on a rocking frame in a concrete hall', col: 2, row: 1, shape: 'wide', phoneSrc: rheaHeroSquare },
         { src: rheaHands, alt: 'Fastening the canvas lining inside the cradle', col: 2, row: 4, shape: 'landscape' },
         { src: rheaStraw, alt: 'Bundles of willow rods in the workshop', col: 1, row: 5, shape: 'portrait' },
         { src: rheaLegs, alt: 'A person rocking the cradle with their foot on the wooden runner', col: 3, row: 5, shape: 'landscape' },

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { projects } from '../../data/projects';
 
@@ -40,6 +40,16 @@ gallery.forEach((image, index) => {
   current.push(item);
 });
 const steps = detail?.steps;
+// Tiles with a phone version (e.g. a square crop) get a <source> for narrow screens.
+const phoneSources = new Map<number, string>();
+await Promise.all(
+  (detail?.mosaic ?? []).map(async (tile, index) => {
+    if (!tile.phoneSrc) return;
+    const widths = [600, 900, 1200, 1800];
+    const images = await Promise.all(widths.map((width) => getImage({ src: tile.phoneSrc!, width, format: 'webp' })));
+    phoneSources.set(index, images.map((image, i) => `${image.src} ${widths[i]}w`).join(', '));
+  }),
+);
 const mosaic = detail?.mosaic;
 // An optional empty row (the breathing space under the text) between the first and the following tiles.
 const spacer = detail?.mosaicSpacer;
@@ -76,6 +86,19 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
             style={`--c: ${tile.col}; --r: ${tile.row}; --i: ${index}; --d: ${(tile.col - 1) * 90}ms;`}
             data-reveal={index > 0 ? '' : undefined}
           >
+            {phoneSources.has(index) && (
+              <picture>
+                <source media="(max-width: 780px)" srcset={phoneSources.get(index)} sizes="100vw" />
+                <Image
+                  src={tile.src}
+                  alt={tile.alt}
+                  widths={[900, 1400, 2000, 2400]}
+                  sizes="67vw"
+                  loading="eager"
+                />
+              </picture>
+            )}
+            {!phoneSources.has(index) && (
             <Image
               src={tile.src}
               alt={tile.alt}
@@ -83,6 +106,7 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
               sizes={tile.shape === 'wide' ? '(max-width: 780px) 100vw, 67vw' : '(max-width: 780px) 100vw, 33vw'}
               loading={index < 3 ? 'eager' : 'lazy'}
             />
+            )}
           </div>
         ))}
       </div>
@@ -330,6 +354,10 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
     grid-row: var(--r) / span 2;
   }
 
+  .mosaic-tile :global(picture) {
+    display: contents;
+  }
+
   .mosaic-tile :global(img) {
     display: block;
     width: 100%;
@@ -402,8 +430,16 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
     }
 
     .mosaic-grid--centered .mosaic-tile--wide {
+      position: relative;
       aspect-ratio: 1 / 1;
+      width: calc(100% + 2 * var(--space-5));
       margin-inline: calc(-1 * var(--space-5));
+    }
+
+    /* The photo is laid over the square, so its own shape can never stretch the box. */
+    .mosaic-grid--centered .mosaic-tile--wide :global(img) {
+      position: absolute;
+      inset: 0;
     }
 
     .mosaic-text--aligned h1 {
