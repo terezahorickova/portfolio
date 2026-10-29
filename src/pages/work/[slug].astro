@@ -47,6 +47,14 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
 ---
 
 <BaseLayout title={project.title} wide={!!mosaic}>
+  <script is:inline>
+    // Lets the photos below the opening rise into place as they scroll into view (see .mosaic-tile[data-reveal]).
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+      document.documentElement.classList.add('reveal-ready');
+    // Failsafe: if the script below never starts, show the photos normally.
+    window.__revealGuard = setTimeout(() => document.documentElement.classList.remove('reveal-ready'), 4000);
+    }
+  </script>
   {mosaic ? (
     <article class="mosaic">
       <div class:list={['mosaic-grid', { 'mosaic-grid--centered': detail?.centerFirstScreen }]} style={mosaicRows}>
@@ -65,7 +73,8 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
         {mosaic.map((tile, index) => (
           <div
             class={`mosaic-tile mosaic-tile--${tile.shape}`}
-            style={`--c: ${tile.col}; --r: ${tile.row}; --i: ${index};`}
+            style={`--c: ${tile.col}; --r: ${tile.row}; --i: ${index}; --d: ${(tile.col - 1) * 90}ms;`}
+            data-reveal={index > 0 ? '' : undefined}
           >
             <Image
               src={tile.src}
@@ -198,6 +207,26 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
   )}
 </BaseLayout>
 
+<script>
+  const root = document.documentElement;
+  const tiles = document.querySelectorAll<HTMLElement>('.mosaic-tile[data-reveal]');
+  clearTimeout((window as any).__revealGuard);
+
+  if (root.classList.contains('reveal-ready') && tiles.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add('is-in');
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+    );
+    tiles.forEach((tile) => observer.observe(tile));
+  }
+</script>
+
 <style>
   /* ---- Mosaic layout (projects with `detail.mosaic`) ----
      3 equal columns; one grid row is half a portrait photo (a 3:4
@@ -250,6 +279,18 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
     font-size: clamp(13px, calc(var(--cell) * 0.036), 20px);
   }
 
+  /* Refined opening (desktop): a headline twice the size, and the headline
+     with its subtitle lifted a little away from the paragraph below. */
+  @media (min-width: 1200px) {
+    .mosaic-text--aligned h1 {
+      font-size: clamp(56px, calc(var(--cell) * 0.14), 96px);
+    }
+
+    .mosaic-text--aligned .subtitle {
+      margin-bottom: calc(var(--cell) * 0.07);
+    }
+  }
+
   .mosaic-text .story-body,
   .mosaic-text .credits {
     font-size: inherit;
@@ -259,6 +300,20 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
   .mosaic-tile {
     grid-column: var(--c);
     overflow: hidden;
+  }
+
+  /* Photos below the opening rise a short way and fade in as they scroll into
+     view. Photos in the same row follow each other by a fraction of a second. */
+  .mosaic-tile[data-reveal] {
+    transition:
+      opacity 0.9s ease,
+      transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--d, 0ms);
+  }
+
+  :global(html.reveal-ready) .mosaic-tile[data-reveal]:not(.is-in) {
+    opacity: 0;
+    transform: translateY(40px);
   }
 
   .mosaic-tile--portrait {
