@@ -124,8 +124,8 @@ export interface ProjectDetail {
   mosaic?: MosaicTile[];
   /** Mosaic only: an empty row of this many grid rows' height, inserted as row number `row` (a breathing space; tiles after it use the shifted row numbers). */
   mosaicSpacer?: { row: number; size: number };
-  /** Mosaic only: a small downward arrow in the spacer row, under the text. */
-  scrollCue?: boolean;
+  /** Mosaic only (desktop): refined opening. The first photo sits centred on the screen (white space under it as well as above), and the text is 4 of 18 grid columns wide with its bottom edge level with the photo's. */
+  centerFirstScreen?: boolean;
   /** Portrait photo shown beside the intro text. */
   intro?: ImageMetadata;
   /** Big photo under the intro; defaults to the project's `cover`. Use `null` to show a "coming soon" box instead. */
@@ -279,7 +279,7 @@ export const projects: Project[] = [
     body: 'The wicker cradle Rhea was created as part of the Bohemian Perfection project, a collaboration between students and traditional craftspeople. As part of this initiative, I focused on the craft of basketry and designed a baby cradle for infants up to 8 months of age. My goal was to modernize the craft and traditional production of wicker baskets, maximizing the use of natural materials while giving them a contemporary design. I was personally involved in the fabrication process, spending many days in the workshop with master basket weaver Mr. Král to gain invaluable hands-on experience in this beautiful craft.',
     detail: {
       credits: ['Collaboration: Petr Král', 'Photography: Tereza Horičková'],
-      scrollCue: true,
+      centerFirstScreen: true,
       mosaicSpacer: { row: 3, size: 0.46 },
       mosaic: [
         { src: rheaHero, alt: 'The Rhea wicker cradle on a rocking frame in a concrete hall', col: 2, row: 1, shape: 'wide' },

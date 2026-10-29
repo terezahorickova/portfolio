@@ -2,7 +2,6 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { projects } from '../../data/projects';
-import chevron from '../../assets/front/chevron.png';
 
 export function getStaticPaths() {
   return projects.map((project) => ({
@@ -50,8 +49,8 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
 <BaseLayout title={project.title} wide={!!mosaic}>
   {mosaic ? (
     <article class="mosaic">
-      <div class="mosaic-grid" style={mosaicRows}>
-        <div class="mosaic-text">
+      <div class:list={['mosaic-grid', { 'mosaic-grid--centered': detail?.centerFirstScreen }]} style={mosaicRows}>
+        <div class:list={['mosaic-text', { 'mosaic-text--aligned': detail?.centerFirstScreen }]}>
           <h1>{project.title}</h1>
           <p class="subtitle">{subtitle}</p>
           {bodyParagraphs.map((text) => <p class="story-body">{text}</p>)}
@@ -63,9 +62,6 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
             </p>
           )}
         </div>
-        {detail?.scrollCue && spacer && (
-          <img class="mosaic-cue" style={`--r: ${spacer.row};`} src={chevron.src} width={chevron.width} height={chevron.height} alt="" />
-        )}
         {mosaic.map((tile, index) => (
           <div
             class={`mosaic-tile mosaic-tile--${tile.shape}`}
@@ -222,17 +218,6 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
     grid-auto-rows: var(--unit);
   }
 
-  /* A small pixel arrow pointing down, in the spacer row under the text. */
-  .mosaic-cue {
-    grid-column: 1;
-    grid-row: var(--r);
-    align-self: center;
-    width: 12px;
-    height: auto;
-    transform: rotate(90deg);
-    image-rendering: pixelated;
-  }
-
   /* Text fills exactly one column (the same width as the photo columns),
      bottom-aligned beside the first photo, and scales with the column
      width so it always fits the two rows. */
@@ -245,6 +230,15 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
     gap: var(--space-2);
     padding: 0 0 var(--space-5);
     font-size: clamp(11px, calc(var(--cell) * 0.026), 15px);
+  }
+
+  /* Refined opening (desktop): the text is 4 of 18 grid columns wide (the 3
+     main columns are 6 columns each) and ends level with the bottom of the photo. */
+  @media (min-width: 1200px) {
+    .mosaic-text--aligned {
+      width: calc(var(--cell) * 2 / 3 - var(--gap) / 3);
+      padding-bottom: 0;
+    }
   }
 
   .mosaic-text h1 {
@@ -288,6 +282,20 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
     object-fit: cover;
   }
 
+  /* Desktop: the opening photo is two rows tall (4/3 of a column). Pull the
+     grid up so that photo sits in the middle of the window, but never higher
+     than 64px from the top, which keeps it clear of the menu, and never lower
+     than its normal place under the header. */
+  @media (min-width: 1200px) {
+    .mosaic-grid--centered {
+      margin-top: clamp(
+        calc(64px - var(--header-h)),
+        calc((100svh - var(--cell) * 4 / 3) / 2 - var(--header-h)),
+        0px
+      );
+    }
+  }
+
   @media (max-width: 1199px) {
     .mosaic-grid {
       display: flex;
@@ -324,9 +332,6 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
       aspect-ratio: 3 / 2;
     }
 
-    .mosaic-cue {
-      display: none;
-    }
   }
 
   .story {
