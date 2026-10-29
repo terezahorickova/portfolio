@@ -366,6 +366,11 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
       font-size: var(--text-1);
     }
 
+    /* Refined opening: the opening photo comes first, then the text. */
+    .mosaic-text--aligned {
+      order: 1;
+    }
+
     .mosaic-text h1 {
       font-size: var(--text-5);
     }
@@ -386,7 +391,24 @@ const mosaicRows = spacer ? `grid-template-rows: repeat(${spacer.row - 1}, var(-
     .mosaic-tile--wide {
       aspect-ratio: 3 / 2;
     }
+  }
 
+  /* Phones, refined opening: the first photo is a square that fills the whole
+     width of the screen, directly under the (sticky) header. The text follows
+     it, a little larger; the other photos keep their margins. */
+  @media (max-width: 780px) {
+    .mosaic-grid--centered {
+      margin-top: -50px; /* cancels the page's top padding */
+    }
+
+    .mosaic-grid--centered .mosaic-tile--wide {
+      aspect-ratio: 1 / 1;
+      margin-inline: calc(-1 * var(--space-5));
+    }
+
+    .mosaic-text--aligned h1 {
+      font-size: var(--text-6);
+    }
   }
 
   .story {
